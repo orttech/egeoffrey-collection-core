@@ -1,0 +1,20 @@
+branch: development
+description: Parse a RSS feed
+dockerhub: egeoffrey/egeoffrey-service-rss
+github: egeoffrey/egeoffrey-service-rss
+icon: rss
+manifest_schema: 2
+modules:
+- service/rss:
+    description: Parse a RSS feed
+    service_configuration:
+      pull:
+      - description: The url of the RSS feed
+        format: string
+        name: url
+        placeholder: http://rss.cnn.com/rss/cnn_latest.rss
+        required: true
+package: egeoffrey-service-rss
+revision: 11
+tags: service rss
+version: 1.0

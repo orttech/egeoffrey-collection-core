@@ -1,0 +1,16 @@
+disabled: true
+description: csv
+format: float_2
+icon: microchip
+retain: history
+service:
+  configuration:
+    csv_file: https://www1.ncdc.noaa.gov/pub/data/cdo/samples/NORMAL_DLY_sample_csv.csv
+    value_position: 9
+    date_position: 6
+    date_format: "%Y%m%d"
+  mode: pull
+  name: csv
+  schedule:
+    days: 1
+    trigger: interval

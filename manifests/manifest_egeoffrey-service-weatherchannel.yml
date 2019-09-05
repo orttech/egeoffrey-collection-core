@@ -1,0 +1,34 @@
+branch: development
+description: Retrieve weather information from weatherchannel
+dockerhub: egeoffrey/egeoffrey-service-weatherchannel
+github: egeoffrey/egeoffrey-service-weatherchannel
+icon: cloud-sun
+manifest_schema: 2
+modules:
+- service/weatherchannel:
+    description: Retrieve weather information from weatherchannel
+    module_configuration:
+    - description: Your WeatherChannel API key
+      format: string
+      name: api_key
+      required: true
+    service_configuration:
+      pull:
+      - description: What to request
+        format: alerts
+        name: request
+        required: true
+      - description: The latitude of the location
+        format: float
+        name: latitude
+        placeholder: 12.33
+        required: true
+      - description: The longitude of the location
+        format: float
+        name: longitude
+        placeholder: 70.11
+        required: true
+package: egeoffrey-service-weatherchannel
+revision: 10
+tags: service weather alert
+version: 1.0

@@ -1,0 +1,28 @@
+branch: development
+description: Connect to a slack channel as a bot and interact with the user
+dockerhub: egeoffrey/egeoffrey-interaction-slack
+github: egeoffrey/egeoffrey-interaction-slack
+icon: hashtag
+manifest_schema: 2
+modules:
+- interaction/slack:
+    description: Connect to a slack channel as a bot and interact with the user
+    module_configuration:
+    - description: The Slack legacy token the chatbot will use to connect to Slack
+      format: string
+      name: bot_token
+      required: true
+    - description: The name of the bot as it will show up on Slack
+      format: string
+      name: bot_name
+      placeholder: housebot
+      required: true
+    - description: The name of the channel the chatbot has to join
+      format: string
+      name: channel
+      placeholder: channel_name
+      required: true
+package: egeoffrey-interaction-slack
+revision: 8
+tags: interaction slack
+version: 1.0

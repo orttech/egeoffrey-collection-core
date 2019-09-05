@@ -1,0 +1,12 @@
+disabled: true
+description: rss
+format: string
+retain: single_value
+service:
+  configuration:
+    url: http://rss.cnn.com/rss/cnn_latest.rss
+  mode: pull
+  name: rss
+  schedule:
+    minutes: 60
+    trigger: interval

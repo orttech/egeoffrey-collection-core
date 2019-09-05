@@ -1,0 +1,12 @@
+type: recurrent
+conditions:
+- - humidity > threshold
+constants:
+  threshold: 80
+schedule:
+  minutes: 60
+  trigger: interval
+severity: info
+text: The humidity is very high (%humidity%%)
+variables:
+  humidity: examples/openweathermap/humidity

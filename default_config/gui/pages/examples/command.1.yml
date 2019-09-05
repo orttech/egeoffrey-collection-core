@@ -1,0 +1,13 @@
+- Command:
+  - icon: play
+    sensor: examples/command/command_in
+    size: 3
+    title: Command In
+    widget: value
+  - actions:
+    - SET examples/command/command_out 1
+    icon: play
+    size: 3
+    text: Run Command
+    title: Command Out
+    widget: button

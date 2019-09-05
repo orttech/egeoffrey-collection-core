@@ -1,0 +1,6 @@
+- Earthquake:
+  - sensors:
+    - examples/earthquake/earthquake
+    size: 6
+    title: Earthquake
+    widget: map

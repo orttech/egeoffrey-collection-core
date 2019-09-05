@@ -1,0 +1,25 @@
+branch: development
+description: Retrieve earthquake information
+dockerhub: egeoffrey/egeoffrey-service-earthquake
+github: egeoffrey/egeoffrey-service-earthquake
+icon: globe-africa
+manifest_schema: 2
+modules:
+- service/earthquake:
+    description: Retrieve earthquake information
+    service_configuration:
+      pull:
+      - description: The domain hosting the FDSN Web Services
+        format: string
+        name: domain
+        placeholder: earthquake.usgs.gov
+        required: true
+      - description: A query in the format key1=value1&key=value2
+        format: string
+        name: query
+        placeholder: minmag=7
+        required: true
+package: egeoffrey-service-earthquake
+revision: 17
+tags: service earthquake
+version: 1.0

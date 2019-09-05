@@ -1,0 +1,43 @@
+branch: development
+description: send out sms notifications (betamax voip service)
+dockerhub: egeoffrey/egeoffrey-notification-betamax_sms
+github: egeoffrey/egeoffrey-notification-betamax_sms
+icon: sms
+manifest_schema: 2
+modules:
+- notification/betamax_sms:
+    description: send out sms notifications (betamax voip service)
+    module_configuration:
+    - description: The phone number to be used as the from of the message
+      format: string
+      name: from
+      placeholder: 112341231232
+      required: true
+    - description: The Betamax hostname of your service
+      format: string
+      name: hostname
+      placeholder: www.frevoipdeal.com
+      required: true
+    - description: The username of your betamax account
+      format: string
+      name: username
+      placeholder: username
+      required: true
+    - description: The password of your betamax account
+      format: password
+      name: password
+      placeholder: password
+      required: true
+    - description: Use SSL
+      format: checkbox
+      name: ssl
+      required: true
+    - description: Recipient phone number(s), comma separated
+      format: string
+      name: to
+      placeholder: 112341231232
+      required: true
+package: egeoffrey-notification-betamax_sms
+revision: 9
+tags: notification sms voip
+version: 1.0

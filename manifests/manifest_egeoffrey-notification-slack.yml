@@ -1,0 +1,28 @@
+branch: development
+description: Send a notification through slack
+dockerhub: egeoffrey/egeoffrey-notification-slack
+github: egeoffrey/egeoffrey-notification-slack
+icon: hashtag
+manifest_schema: 2
+modules:
+- notification/slack:
+    description: Make a phone call through an attached serial device (just a few rings)
+    module_configuration:
+    - description: The Slack legacy token the chatbot will use to connect to Slack
+      format: string
+      name: bot_token
+      required: true
+    - description: The name of the bot as it will show up on Slack
+      format: string
+      name: bot_name
+      placeholder: housebot
+      required: true
+    - description: The name of the channel the chatbot will send notifications to
+      format: string
+      name: channel
+      placeholder: channel_name
+      required: true
+package: egeoffrey-notification-slack
+revision: 7
+tags: notification slack
+version: 1.0

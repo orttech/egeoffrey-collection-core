@@ -1,0 +1,15 @@
+branch: development
+container_config:
+  ports:
+  - 80:80
+description: Provides a web user interface for accessing all eGeoffrey's functionalities
+dockerhub: egeoffrey/egeoffrey-gui
+github: egeoffrey/egeoffrey-gui
+icon: columns
+manifest_schema: 2
+modules:
+- gui/webserver: {}
+package: egeoffrey-gui
+revision: 50
+tags: gui
+version: 1.0

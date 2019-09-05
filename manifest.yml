@@ -1,0 +1,344 @@
+branch: development
+container_config:
+  environment:
+  - EGEOFFREY_LOGGING_LOCAL=0
+  ports:
+  - 80:80
+  volumes:
+  - ./data/logs:/egeoffrey/logs
+  - ./data/config:/egeoffrey/config
+description: An All-In-One collection of the core eGeoffrey packages
+dockerhub: egeoffrey/egeoffrey-distro-core
+github: egeoffrey/egeoffrey-distro-core
+icon: broadcast-tower
+manifest_schema: 2
+modules:
+- controller/logger: {}
+- controller/db: {}
+- controller/config: {}
+- controller/alerter: {}
+- controller/chatbot: {}
+- controller/hub: {}
+- gui/webserver: {}
+- interaction/slack:
+    description: Connect to a slack channel as a bot and interact with the user
+    module_configuration:
+    - description: The Slack legacy token the chatbot will use to connect to Slack
+      format: string
+      name: bot_token
+      required: true
+    - description: The name of the bot as it will show up on Slack
+      format: string
+      name: bot_name
+      placeholder: housebot
+      required: true
+    - description: The name of the channel the chatbot has to join
+      format: string
+      name: channel
+      placeholder: channel_name
+      required: true
+- notification/betamax_sms:
+    description: send out sms notifications (betamax voip service)
+    module_configuration:
+    - description: The phone number to be used as the from of the message
+      format: string
+      name: from
+      placeholder: 112341231232
+      required: true
+    - description: The Betamax hostname of your service
+      format: string
+      name: hostname
+      placeholder: www.frevoipdeal.com
+      required: true
+    - description: The username of your betamax account
+      format: string
+      name: username
+      placeholder: username
+      required: true
+    - description: The password of your betamax account
+      format: password
+      name: password
+      placeholder: password
+      required: true
+    - description: Use SSL
+      format: checkbox
+      name: ssl
+      required: true
+    - description: Recipient phone number(s), comma separated
+      format: string
+      name: to
+      placeholder: 112341231232
+      required: true
+- notification/slack:
+    description: Make a phone call through an attached serial device (just a few rings)
+    module_configuration:
+    - description: The Slack legacy token the chatbot will use to connect to Slack
+      format: string
+      name: bot_token
+      required: true
+    - description: The name of the bot as it will show up on Slack
+      format: string
+      name: bot_name
+      placeholder: housebot
+      required: true
+    - description: The name of the channel the chatbot will send notifications to
+      format: string
+      name: channel
+      placeholder: channel_name
+      required: true
+- notification/smtp:
+    description: Send out email notifications
+    module_configuration:
+    - description: The email address used as the from of the message
+      format: string
+      name: from
+      placeholder: user@email.com
+      required: true
+    - description: The SMTP server used to send out the email
+      format: string
+      name: hostname
+      placeholder: smtp.google.com
+      required: true
+    - description: The username for authenticating against the SMTP server
+      format: string
+      name: username
+      placeholder: username
+      required: false
+    - description: The password for authenticating against the SMTP server
+      format: password
+      name: password
+      placeholder: password
+      required: false
+    - description: Use TLS
+      format: checkbox
+      name: tls
+      required: true
+    - description: Recipient email address(es), comma separated
+      format: string
+      name: to
+      placeholder: user@email.com
+      required: true
+    - description: Subject of the email
+      format: string
+      name: subject
+      placeholder: House Notification
+      required: true
+    - description: Template to use for the email's body
+      format: text
+      name: template
+      required: true
+- service/command:
+    description: Run system commands
+    service_configuration:
+      actuator:
+      - description: Command to run
+        format: string
+        name: command
+        placeholder: reboot
+        required: true
+      pull:
+      - description: Command to run
+        format: string
+        name: command
+        placeholder: uptime
+        required: true
+- service/csv:
+    description: Retrieve values from a csv file
+    service_configuration:
+      pull:
+      - description: Location or URL of the CSV file
+        format: string
+        name: csv_file
+        placeholder: https://www1.ncdc.noaa.gov/pub/data/cdo/samples/NORMAL_DLY_sample_csv.csv
+        required: true
+      - description: Column number which contains the value to extract
+        format: int
+        name: value_position
+        required: true
+      - description: If defined, only the lines of the file with this value at this
+          position will be evaluated
+        format: string
+        name: filter
+        required: false
+      - description: The column you want to filter in the csv file
+        format: int
+        name: filter_position
+        required: false
+      - description: The column of the date (UTC) in the csv file
+        format: int
+        name: date_position
+        required: false
+      - description: The format of the date in strftime format
+        format: string
+        name: date_format
+        required: false
+      - description: An optional prefix of the value (that will be striped out) used
+          as additional filter
+        format: string
+        name: prefix
+        required: false
+- service/earthquake:
+    description: Retrieve earthquake information
+    service_configuration:
+      pull:
+      - description: The domain hosting the FDSN Web Services
+        format: string
+        name: domain
+        placeholder: earthquake.usgs.gov
+        required: true
+      - description: A query in the format key1=value1&key=value2
+        format: string
+        name: query
+        placeholder: minmag=7
+        required: true
+- service/fcc_weather:
+    description: Retrieve weather information from Free Code Camp Weather API
+    service_configuration:
+      pull:
+      - description: What to measure
+        format: temperature|pressure|humidity|wind|wind_dir|condition|description|visibility|clouds
+        name: request
+        required: true
+      - description: The latitude of the location
+        format: float
+        name: latitude
+        placeholder: 12.33
+        required: true
+      - description: The longitude of the location
+        format: float
+        name: longitude
+        placeholder: 70.11
+        required: true
+- service/icloud:
+    description: Retrieve position of a device from Apple icloud service
+    service_configuration:
+      pull:
+      - description: The username of the icloud account
+        format: string
+        name: username
+        placeholder: username@email.com
+        required: true
+      - description: The name of the device to monitor
+        format: string
+        name: device_name
+        placeholder: my_iPhone
+        required: true
+- service/image:
+    description: Retrieve images from a url or by running a command
+    service_configuration:
+      pull:
+      - description: Download the image from this URL
+        format: string
+        name: url
+        placeholder: http://domain.com/image.jpg
+        required: false
+      - description: Run a command returning an image
+        format: string
+        name: command
+        placeholder: raspistill -w 640 -h 480 -o -
+        required: false
+      - description: Username if the URL requires basic authentication
+        format: string
+        name: username
+        placeholder: username
+        required: false
+      - description: Password if the URL requires basic authentication
+        format: string
+        name: password
+        placeholder: password
+        required: true
+- service/mqtt:
+    description: Interact with sensors through a mqtt broker
+    module_configuration:
+    - description: The MQTT hostname to connect to
+      format: string
+      name: hostname
+      placeholder: egeoffrey-gateway
+      required: true
+    - description: The port of the MQTT broker
+      format: int
+      name: port
+      placeholder: 1883
+      required: true
+    - description: The username for authenticating against the mqtt broker
+      format: string
+      name: username
+      placeholder: username
+      required: false
+    - description: The password for authenticating against the mqtt broker
+      format: password
+      name: password
+      placeholder: password
+      required: false
+    service_configuration:
+      actuator:
+      - description: The topic to publish to
+        format: string
+        name: topic
+        placeholder: /sensors/out
+        required: true
+      push:
+      - description: The topic to subscribe
+        format: string
+        name: topic
+        placeholder: /sensors/in
+        required: true
+- service/openweathermap:
+    description: Retrieve weather information from OpenWeatherMap
+    module_configuration:
+    - description: Your OpenWeatherMap API key
+      format: string
+      name: api_key
+      required: true
+    service_configuration:
+      pull:
+      - description: What to measure
+        format: temperature|pressure|humidity|wind|wind_dir|condition|description|visibility|rain_1h|rain_3h|snow_1h|snow_3h|clouds|uv|forecast_temperature|forecast_pressure|forecast_humidity|forecast_wind|forecast_wind_dir|forecast_condition|forecast_description|forecast_visibility|forecast_rain_3h|forecast_snow_3h|forecast_clouds
+        name: request
+        required: true
+      - description: The latitude of the location
+        format: float
+        name: latitude
+        placeholder: 12.33
+        required: true
+      - description: The longitude of the location
+        format: float
+        name: longitude
+        placeholder: 70.11
+        required: true
+- service/rss:
+    description: Parse a RSS feed
+    service_configuration:
+      pull:
+      - description: The url of the RSS feed
+        format: string
+        name: url
+        placeholder: http://rss.cnn.com/rss/cnn_latest.rss
+        required: true
+- service/weatherchannel:
+    description: Retrieve weather information from weatherchannel
+    module_configuration:
+    - description: Your WeatherChannel API key
+      format: string
+      name: api_key
+      required: true
+    service_configuration:
+      pull:
+      - description: What to request
+        format: alerts
+        name: request
+        required: true
+      - description: The latitude of the location
+        format: float
+        name: latitude
+        placeholder: 12.33
+        required: true
+      - description: The longitude of the location
+        format: float
+        name: longitude
+        placeholder: 70.11
+        required: true
+package: egeoffrey-distro-core
+revision: 1
+tags: distro core
+version: 1.0

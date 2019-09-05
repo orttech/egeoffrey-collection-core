@@ -1,0 +1,79 @@
+- Status/Control widgets:
+  - icon: hashtag
+    sensor: examples/widgets/value
+    size: 3
+    title: Current Value
+    widget: value
+  - sensor: examples/widgets/status
+    size: 3
+    title: Status
+    widget: status
+  - icon: sliders-h
+    sensor: examples/widgets/status
+    size: 3
+    title: On/Off Switch
+    widget: control
+  - actions:
+    - SET examples/widgets/status 1
+    size: 3
+    text: Set status to ON
+    title: Button
+    widget: button
+- ? ''
+  : - sensor: examples/widgets/input_int
+      size: 3
+      title: Input Integer
+      widget: input
+    - sensor: examples/widgets/input_float
+      size: 3
+      title: Input Float
+      widget: input
+    - sensor: examples/widgets/input_string
+      size: 3
+      title: Input String
+      widget: input
+- Timeseries widgets:
+  - icon: chart-line
+    sensors:
+    - examples/widgets/value
+    size: 3
+    title: Summary Widget
+    widget: summary
+  - sensors:
+    - examples/widgets/value
+    size: 4
+    title: 'Timeline: Latest values'
+    widget: timeline
+  - group_by: hour
+    sensors:
+    - examples/widgets/value
+    size: 5
+    title: 'Timeline: aggregate by hour'
+    widget: timeline
+- ? ''
+  : - group_by: day
+      sensor: examples/widgets/value
+      size: 4
+      title: Daily Ranges
+      widget: range
+    - group_by: day
+      sensors:
+      - examples/widgets/value
+      size: 8
+      title: 'Timeline: aggregate by day'
+      widget: timeline
+- Tasks widget:
+  - sensor: examples/widgets/tasks
+    size: 4
+    title: Tasks List
+    widget: tasks
+- Image widgets:
+  - sensor: examples/widgets/image
+    size: 6
+    title: Image
+    widget: image
+- Calendar widgets:
+  - sensor: examples/widgets/calendar
+    size: 12
+    title: Calendar/Scheduler
+    widget: calendar

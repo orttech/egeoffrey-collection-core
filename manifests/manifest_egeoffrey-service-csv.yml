@@ -1,0 +1,46 @@
+branch: development
+description: Retrieve values from a csv file
+dockerhub: egeoffrey/egeoffrey-service-csv
+github: egeoffrey/egeoffrey-service-csv
+icon: file-csv
+manifest_schema: 2
+modules:
+- service/csv:
+    description: Retrieve values from a csv file
+    service_configuration:
+      pull:
+      - description: Location or URL of the CSV file
+        format: string
+        name: csv_file
+        placeholder: https://www1.ncdc.noaa.gov/pub/data/cdo/samples/NORMAL_DLY_sample_csv.csv
+        required: true
+      - description: Column number which contains the value to extract
+        format: int
+        name: value_position
+        required: true
+      - description: If defined, only the lines of the file with this value at this
+          position will be evaluated
+        format: string
+        name: filter
+        required: false
+      - description: The column you want to filter in the csv file
+        format: int
+        name: filter_position
+        required: false
+      - description: The column of the date (UTC) in the csv file
+        format: int
+        name: date_position
+        required: false
+      - description: The format of the date in strftime format
+        format: string
+        name: date_format
+        required: false
+      - description: An optional prefix of the value (that will be striped out) used
+          as additional filter
+        format: string
+        name: prefix
+        required: false
+package: egeoffrey-service-csv
+revision: 11
+tags: service csv
+version: 1.0

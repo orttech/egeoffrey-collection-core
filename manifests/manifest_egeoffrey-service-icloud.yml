@@ -1,0 +1,25 @@
+branch: development
+description: Retrieve position of a device from Apple icloud service
+dockerhub: egeoffrey/egeoffrey-service-icloud
+github: egeoffrey/egeoffrey-service-icloud
+icon: apple-alt
+manifest_schema: 2
+modules:
+- service/icloud:
+    description: Retrieve position of a device from Apple icloud service
+    service_configuration:
+      pull:
+      - description: The username of the icloud account
+        format: string
+        name: username
+        placeholder: username@email.com
+        required: true
+      - description: The name of the device to monitor
+        format: string
+        name: device_name
+        placeholder: my_iPhone
+        required: true
+package: egeoffrey-service-icloud
+revision: 9
+tags: service apple position
+version: 1.0

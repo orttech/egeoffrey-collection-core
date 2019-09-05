@@ -1,0 +1,55 @@
+- New York Weather:
+  - icon: thermometer-full
+    sensor: examples/fcc_weather/temperature
+    size: 3
+    title: Temperature
+    widget: value
+  - icon_sensor: examples/fcc_weather/condition
+    sensor: examples/fcc_weather/condition_description
+    size: 3
+    title: Weather Condition
+    widget: value
+  - icon: tint
+    sensor: examples/fcc_weather/humidity
+    size: 3
+    title: Humidity
+    widget: value
+  - icon: weight
+    sensor: examples/fcc_weather/pressure
+    size: 3
+    title: Pressure
+    widget: value
+- Temperature Statistics:
+  - icon_sensor: examples/fcc_weather/condition
+    sensors:
+    - examples/fcc_weather/temperature
+    size: 3
+    title: 'Temperature: Summary'
+    widget: summary
+  - sensors:
+    - examples/fcc_weather/temperature
+    - examples/fcc_weather/condition
+    size: 4
+    title: 'Temperature: Latest measures'
+    widget: timeline
+  - group_by: hour
+    sensors:
+    - examples/fcc_weather/temperature
+    - examples/fcc_weather/condition
+    size: 5
+    title: 'Temperature: Hourly'
+    widget: timeline
+- ? ''
+  : - group_by: day
+      sensor: examples/fcc_weather/temperature
+      size: 4
+      title: 'Temperature: Daily Ranges'
+      widget: range
+    - group_by: day
+      sensors:
+      - examples/fcc_weather/temperature
+      - examples/fcc_weather/condition
+      size: 8
+      title: 'Temperature: Daily'
+      widget: timeline
+

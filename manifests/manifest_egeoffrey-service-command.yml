@@ -1,0 +1,27 @@
+branch: development
+description: Run system commands, useful to e.g. interact with a utility which communicates
+  with a sensor
+dockerhub: egeoffrey/egeoffrey-service-command
+github: egeoffrey/egeoffrey-service-command
+icon: terminal
+manifest_schema: 2
+modules:
+- service/command:
+    description: Run system commands
+    service_configuration:
+      actuator:
+      - description: Command to run
+        format: string
+        name: command
+        placeholder: reboot
+        required: true
+      pull:
+      - description: Command to run
+        format: string
+        name: command
+        placeholder: uptime
+        required: true
+package: egeoffrey-service-command
+revision: 11
+tags: service command os
+version: 1.0

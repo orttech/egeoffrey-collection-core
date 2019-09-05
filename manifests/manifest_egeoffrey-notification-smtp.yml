@@ -1,0 +1,52 @@
+branch: development
+description: Send out email notifications
+dockerhub: egeoffrey/egeoffrey-notification-smtp
+github: egeoffrey/egeoffrey-notification-smtp
+icon: envelope
+manifest_schema: 2
+modules:
+- notification/smtp:
+    description: Send out email notifications
+    module_configuration:
+    - description: The email address used as the from of the message
+      format: string
+      name: from
+      placeholder: user@email.com
+      required: true
+    - description: The SMTP server used to send out the email
+      format: string
+      name: hostname
+      placeholder: smtp.google.com
+      required: true
+    - description: The username for authenticating against the SMTP server
+      format: string
+      name: username
+      placeholder: username
+      required: false
+    - description: The password for authenticating against the SMTP server
+      format: password
+      name: password
+      placeholder: password
+      required: false
+    - description: Use TLS
+      format: checkbox
+      name: tls
+      required: true
+    - description: Recipient email address(es), comma separated
+      format: string
+      name: to
+      placeholder: user@email.com
+      required: true
+    - description: Subject of the email
+      format: string
+      name: subject
+      placeholder: House Notification
+      required: true
+    - description: Template to use for the email's body
+      format: text
+      name: template
+      required: true
+package: egeoffrey-notification-smtp
+revision: 8
+tags: notification email
+version: 1.0
