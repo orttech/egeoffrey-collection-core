@@ -37,7 +37,7 @@ class Maps extends Widget {
         if (! gui.maps_loaded) {
             // load google maps api (lazy loading since we need the api_key from the conf)
             var script = document.createElement('script')
-            script.src = "https://maps.googleapis.com/maps/api/js?key="+this.settings["map"]["api_key"]
+            script.src = "https://maps.googleapis.com/maps/api/js?key="+gui.settings["map_api_key"]
             script.onload = function(this_class) {
                 return function () {
                     var script = document.createElement('script');

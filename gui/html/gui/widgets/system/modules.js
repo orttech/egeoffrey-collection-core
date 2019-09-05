@@ -133,6 +133,7 @@ class Modules extends Widget {
                 else if (module["scope"] == "notification") icon = "bell"
                 else if (module["scope"] == "interaction") icon = "comment"
                 else if (module["scope"] == "service") icon = "exchange-alt"
+                else if (module["scope"] == "gui") icon = "columns"
                 var module_name = '<i class="fas fa-'+icon+'"></i> '+module["fullname"]
                 var module_name = '\
                     <div>\
@@ -176,8 +177,10 @@ class Modules extends Widget {
                 // set the debug checkbox
                 $("#"+this.id+"_debug_"+module_id).prop('checked', module["debug"])
                 // set configured checkbox
-                row.data()[5] = '<i class="fas fa-check text-success"></i>'
-                row.invalidate()
+                if (module["configured"]) {
+                    row.data()[5] = '<i class="fas fa-check text-success"></i>'
+                    row.invalidate()
+                }
                 // set debug checkbox
                 $("#"+this.id+"_debug_"+module_id).iCheck({
                   checkboxClass: 'icheckbox_square-blue',

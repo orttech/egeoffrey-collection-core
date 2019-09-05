@@ -11,6 +11,8 @@ logs
 logs/
 config
 config/
+gui/html/sdk
+gui/html/sdk/
 distro/.tmp
 distro/.build
 distro/.tmp/
