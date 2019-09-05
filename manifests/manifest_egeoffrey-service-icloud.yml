@@ -14,12 +14,16 @@ modules:
         name: username
         placeholder: username@email.com
         required: true
+      - description: The password of the icloud account
+        format: password
+        name: password
+        required: true
       - description: The name of the device to monitor
         format: string
         name: device_name
         placeholder: my_iPhone
         required: true
 package: egeoffrey-service-icloud
-revision: 9
+revision: 10
 tags: service apple position
 version: 1.0

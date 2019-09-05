@@ -218,6 +218,10 @@ modules:
         name: username
         placeholder: username@email.com
         required: true
+      - description: The password of the icloud account
+        format: password
+        name: password
+        required: true
       - description: The name of the device to monitor
         format: string
         name: device_name
@@ -339,6 +343,6 @@ modules:
         placeholder: 70.11
         required: true
 package: egeoffrey-distro-core
-revision: 1
+revision: 2
 tags: distro core
 version: 1.0

@@ -9,7 +9,7 @@
 ## COMMUNICATION:
 # INBOUND: 
 # - IN: 
-#   required: username, device_name
+#   required: username, password, device_name
 #   optional: 
 # OUTBOUND: 
 
@@ -17,7 +17,7 @@ import sys
 reload(sys)  
 sys.setdefaultencoding('utf8')
 import json
-from pyicloud import PyiCloudmodule
+from pyicloud import PyiCloudService
 
 from sdk.python.module.service import Service
 
@@ -50,8 +50,9 @@ class Icloud(Service):
         if message.command == "IN":
             sensor_id = message.args
             # ensure configuration is valid
-            if not self.is_valid_configuration(["username", "device_name"], message.get_data()): return
+            if not self.is_valid_configuration(["username", "password", "device_name"], message.get_data()): return
             username = message.get("username")
+            password = message.get("password")
             device_name = message.get("device_name")
             # if the raw data is cached, take it from there, otherwise request the data and cache it
             cache_key = "/".join([username])
@@ -60,7 +61,7 @@ class Icloud(Service):
             else:
                 # authenticate against icloud
                 try:
-                    icloud = PyiCloudmodule(username)
+                    icloud = PyiCloudService(username, password)
                 except Exception,e:
                     self.log_warning("unable to access icloud: "+exception.get(e))
                     return
