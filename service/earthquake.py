@@ -59,7 +59,7 @@ class Earthquake(Service):
                 except Exception,e: 
                     self.log_warning("unable to connect to "+url+": "+exception.get(e))
                     return
-                self.cache.add(cache_key, data)
+                self.cache.add(cache_key, data) 
             message.reply()
             # load the file
             self.log_debug("parsing data from "+domain+" with "+str(len(data))+" lines")
@@ -75,13 +75,13 @@ class Earthquake(Service):
                 # set the timestamp to the event's date
                 date_format = "%Y-%m-%dT%H:%M:%S.%f"
                 date = datetime.datetime.strptime(entry[1], date_format)
-                message.set("timestamp", int(time.mktime(date.timetuple())))
+                message.set("timestamp", int((date - datetime.datetime(1970, 1, 1)).total_seconds()))
                 # prepare the position value
                 position = {}
                 position["latitude"] = float(entry[2])
                 position["longitude"] = float(entry[3])
                 position["label"] = str(entry[10])
-                date_string = self.date.timestamp2date(int(message.get("timestamp")))
+                date_string = self.date.timestamp2date(self.date.timezone(int(message.get("timestamp"))))
                 position["text"] = str(entry[12])
                 # prepare the measure
                 message.set("value", json.dumps(position))
