@@ -21,7 +21,6 @@ from sdk.python.module.service import Service
 from sdk.python.utils.datetimeutils import DateTimeUtils
 
 import sdk.python.utils.web
-import sdk.python.utils.datetimeutils
 import sdk.python.utils.exceptions as exception
 
 class Earthquake(Service):
@@ -30,6 +29,8 @@ class Earthquake(Service):
         # constants
         self.limit = 10000
         self.query = "format=text&limit="+str(self.limit)+"&orderby=time-asc"
+        # helpers
+        self.date = None
         
     # What to do when running
     def on_start(self):
@@ -90,8 +91,11 @@ class Earthquake(Service):
 
     # What to do when receiving a new/updated configuration for this module    
     def on_configuration(self,message):
+        if message.args == "house" and not message.is_null:
+            if not self.is_valid_configuration(["timezone"], message.get_data()): return False
+            self.date = DateTimeUtils(message.get("timezone"))
         # register/unregister the sensor
-        if message.args.startswith("sensors/"):
+        elif message.args.startswith("sensors/"):
             if message.is_null: 
                 sensor_id = self.unregister_sensor(message)
             else: 

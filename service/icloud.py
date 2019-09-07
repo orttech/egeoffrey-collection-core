@@ -20,8 +20,7 @@ import json
 from pyicloud import PyiCloudService
 
 from sdk.python.module.service import Service
-
-import sdk.python.utils.datetimeutils
+from sdk.python.utils.datetimeutils import DateTimeUtils
 import sdk.python.utils.exceptions as exception
 
 # 
@@ -85,7 +84,7 @@ class Icloud(Service):
                 # identify the device
                 if entry != device_name: continue
                 # normalize the data for a map
-                date = sdk.python.utils.datetimeutils.timestamp2date(self.date.timezone(int(data[device_name]["timeStamp"]/1000)))
+                date = self.date.timestamp2date(self.date.timezone(int(data[device_name]["timeStamp"]/1000)))
                 position["label"] = str(device_name)
                 position["text"] = str("<p><b>"+device_name+":</b></p><p>"+date+" ("+data[device_name]["positionType"]+") </p>")
                 position["latitude"] = data[device_name]["latitude"]
@@ -100,7 +99,7 @@ class Icloud(Service):
     def on_configuration(self,message):
         # we need house timezone
         if message.args == "house" and not message.is_null:
-            if not self.is_valid_configuration(["timezone", "units", "language"], message.get_data()): return False
+            if not self.is_valid_configuration(["timezone"], message.get_data()): return False
             self.date = DateTimeUtils(message.get("timezone"))
         # register/unregister the sensor
         if message.args.startswith("sensors/"):

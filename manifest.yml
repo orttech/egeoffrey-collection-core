@@ -343,6 +343,6 @@ modules:
         placeholder: 70.11
         required: true
 package: egeoffrey-distro-core
-revision: 4
+revision: 5
 tags: distro core
 version: 1.0
