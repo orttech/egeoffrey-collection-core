@@ -67,7 +67,6 @@ class Weatherchannel(Service):
                 data = self.cache.get(cache_key)
             else:
                 url = self.url+location+'/'+self.get_request_type(request)+'/wwir.json?apiKey='+self.config['api_key']+'&language='+self.language
-                print url
                 try:
                     data = sdk.python.utils.web.get(url)
                 except Exception,e: 

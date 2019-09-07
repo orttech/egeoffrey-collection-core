@@ -61,7 +61,7 @@ class Smtp(Notification):
         msg = MIMEMultipart()
         # prepare the message
         msg['From'] = self.config["from"]
-        msg['To'] = ", ".join(self.config["to"])
+        msg['To'] = self.config["to"]
         msg['Subject'] = "["+self.house["name"]+"] "+subject
         if self.is_unicode(body): msg.attach(MIMEText(body.encode('utf-8'), 'html', 'utf-8'))
         else: msg.attach(MIMEText(body, 'html'))

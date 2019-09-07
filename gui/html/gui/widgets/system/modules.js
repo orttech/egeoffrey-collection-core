@@ -147,6 +147,7 @@ class Modules extends Widget {
                                 <span class="sr-only">Toggle Dropdown</span>\
                             </button>\
                             <div class="dropdown-menu" role="menu">\
+                                <a class="dropdown-item" id="'+this.id+'_set_'+module_id+'" style="cursor: pointer"><i class="fas fa-sign-out-alt"></i> Send Notification</a>\
                                 <a class="dropdown-item" id="'+this.id+'_edit_'+module_id+'" style="cursor: pointer"><i class="fas fa-edit"></i> Edit Configuration</a>\
                                 <div class="dropdown-divider"></div>\
                                 <a class="dropdown-item" id="'+this.id+'_start_'+module_id+'" style="cursor: pointer"><i class="fas fa-play"></i> Start Module</a>\
@@ -159,7 +160,6 @@ class Modules extends Widget {
                 var type = module["scope"]
                 var version = module["version"]
                 var debug_html = '<input id="'+this.id+'_debug_'+module_id+'" type="checkbox">'
-                var set_html = module["scope"] == "notification" ? '<div class="input-group margin"><input type="text" id="'+this.id+'_set_text_'+module_id+'" class="form-control"><span class="input-group-btn"><button type="button" id="'+this.id+'_set_'+module_id+'" class="btn btn-default" ><span class="fas fa-sign-out-alt"></span></button></span></div><br>' : ""
                 var table_options = [
                     module_name, 
                     type,
@@ -239,16 +239,22 @@ class Modules extends Widget {
                 if (module["scope"] == "notification") {
                     $("#"+this.id+"_set_"+module_id).unbind().click(function(module_id, module, id) {
                         return function () {
-                            var value = $("#"+id+"_set_text_"+module_id).val()
-                            var message = new Message(gui)
-                            message.recipient = module["fullname"]
-                            message.command = "RUN"
-                            message.args = "info"
-                            message.set_data(value)
-                            gui.send(message)
-                            gui.notify("info", "Requesting "+module["fullname"]+" to notify about "+value)
+                            // ask for the value
+                            bootbox.prompt("Type in the value you want to notify about", function(result){ 
+                                if (result == null) return
+                                var value = result
+                                var message = new Message(gui)
+                                message.recipient = module["fullname"]
+                                message.command = "RUN"
+                                message.args = "info"
+                                message.set_data(value)
+                                gui.send(message)
+                                gui.notify("info", "Requesting "+module["fullname"]+" to notify about "+value)
+                            });
                         };
                     }(module_id, module, this.id));
+                } else {
+                    $("#"+this.id+"_set_"+module_id).addClass("d-none");
                 }
                 // set status
                 this.set_status(module["fullname"], module["started"])
