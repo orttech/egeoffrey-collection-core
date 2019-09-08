@@ -7,5 +7,5 @@ sdk
 logs
 config
 gui/html/sdk
-distro/.tmp
-distro/.build
+collection/.tmp
+collection/.build

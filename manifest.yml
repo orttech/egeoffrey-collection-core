@@ -8,9 +8,9 @@ container_config:
   - ./data/logs:/egeoffrey/logs
   - ./data/config:/egeoffrey/config
 description: An All-In-One collection of the core eGeoffrey packages
-dockerhub: egeoffrey/egeoffrey-distro-core
-github: egeoffrey/egeoffrey-distro-core
-icon: broadcast-tower
+dockerhub: egeoffrey/egeoffrey-collection-core
+github: egeoffrey/egeoffrey-collection-core
+icon: cube
 manifest_schema: 2
 modules:
 - controller/logger: {}
@@ -342,7 +342,7 @@ modules:
         name: longitude
         placeholder: 70.11
         required: true
-package: egeoffrey-distro-core
-revision: 6
-tags: distro core
+package: egeoffrey-collection-core
+revision: 7
+tags: collection core
 version: 1.0

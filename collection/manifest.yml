@@ -1,0 +1,11 @@
+branch: development
+description: An All-In-One collection of the core eGeoffrey packages
+dockerhub: egeoffrey/egeoffrey-collection-core
+github: egeoffrey/egeoffrey-collection-core
+icon: cube
+manifest_schema: 2
+modules: []
+package: egeoffrey-collection-core
+revision: 1
+tags: collection core
+version: 1.0

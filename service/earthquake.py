@@ -27,8 +27,7 @@ class Earthquake(Service):
     # What to do when initializing
     def on_init(self):
         # constants
-        self.limit = 10000
-        self.query = "format=text&limit="+str(self.limit)+"&orderby=time-asc"
+        self.limit = 100
         # helpers
         self.date = None
         

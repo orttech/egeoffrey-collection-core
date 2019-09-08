@@ -25,6 +25,8 @@ class Slack(Notification):
         self.slack_initialized = False
         self.channel_id = None
         self.bot_id = None
+        # request required configuration files
+        self.add_configuration_listener(self.fullname, "+", True)
 
     # What to do when running
     def on_start(self):
