@@ -30,6 +30,8 @@ class Earthquake(Service):
         self.limit = 100
         # helpers
         self.date = None
+        # require configuration before starting up
+        self.add_configuration_listener("house", 1, True)
         
     # What to do when running
     def on_start(self):
