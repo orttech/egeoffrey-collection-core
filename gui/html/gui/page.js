@@ -231,15 +231,19 @@ class Page {
                   {
                     "": [
                       {
-                        "show_only": "value",
-                        "size": 6,
-                        "title": "Latest Data",
-                        "widget": "notifications"
-                      },
-                      {
-                        "size": 6,
+                        "size": 12,
                         "title": "Your Personal Housebot",
                         "widget": "chatbot"
+                      }
+                    ]
+                  },
+                  {
+                    "": [
+                      {
+                        "show_only": "value",
+                        "size": 12,
+                        "title": "Latest Data",
+                        "widget": "notifications"
                       }
                     ]
                   }

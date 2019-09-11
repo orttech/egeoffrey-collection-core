@@ -3,15 +3,10 @@
 // login screen and gui initialization
 class Login {
     constructor() {
-        // default configuration
-        window.EGEOFFREY_DEBUG = 0
-        window.EGEOFFREY_GATEWAY_HOSTNAME = window.location.hostname
-        window.EGEOFFREY_GATEWAY_PORT = 443
-        window.EGEOFFREY_LOGGING_LOCAL = true
         // draw login box
         $("#login_box").html('\
             <p class="login-box-msg">'+locale("login.welcome")+'</p>\
-            <form>\
+            <form id="login_form">\
                 <div class="card card-primary">\
                     <div class="card-header with-border">\
                         <h3 class="card-title">'+locale("login.gateway")+'</h3>\
@@ -87,6 +82,13 @@ class Login {
                 </div>\
             </form>\
         ')
+        // submit form on enter keypress
+        $('#login_form :input').keypress(function (e) {
+          if (e.which == 13) {
+            $("#login_button").trigger("click")
+            return false;
+          }
+        });
         // set to true when the login button is pressed
         var login_submit = false
         // setup checkboxes

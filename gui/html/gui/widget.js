@@ -145,6 +145,7 @@ class Widget {
                     <span id="'+id+'_value_suffix"></span>\
                 </h3>\
                 <p>'+title+'</p>\
+                <small><div class="" id="'+id+'_timestamp">&nbsp;</div></small>\
             </div>\
             <div class="icon">\
                 <i class="fas fa-'+icon+'" id="'+id+'_icon"></i>\
@@ -160,7 +161,7 @@ class Widget {
     // add chat box
     add_chat_box(id, title) {
         var template = '\
-        <div class="card card-primary cardutline direct-chat direct-chat-success">\
+        <div class="card card-primary cardutline direct-chat direct-chat-info">\
             <div class="card-header with-border">\
                 <h3 class="card-title">'+title+'</h3>\
                 <div class="card-tools float-right" id="'+id+'_widget_buttons">\

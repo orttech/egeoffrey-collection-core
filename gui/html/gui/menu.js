@@ -78,6 +78,8 @@ class Menu extends Widget {
                 $("#menu_section_"+section_id+"_name").addClass("active")
                 // set item as active
                 $("#menu_user_item_"+page_tag).addClass("active")
+                // collapse the sidebar if open on mobile
+                if ($("body").hasClass('sidebar-open')) $("body").removeClass('sidebar-open').removeClass('sidebar-collapse').trigger('collapsed.pushMenu');
             }
         }(entry["page"], entry["section_id"], page_tag));
         // open up the section containing the selected menu item

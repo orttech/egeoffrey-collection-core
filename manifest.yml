@@ -5,8 +5,8 @@ container_config:
   ports:
   - 80:80
   volumes:
-  - ./data/logs:/egeoffrey/logs
-  - ./data/config:/egeoffrey/config
+  - ./data/egeoffrey/logs:/egeoffrey/logs
+  - ./data/egeoffrey/config:/egeoffrey/config
 description: An All-In-One collection of the core eGeoffrey packages
 dockerhub: egeoffrey/egeoffrey-collection-core
 github: egeoffrey/egeoffrey-collection-core
@@ -343,6 +343,6 @@ modules:
         placeholder: 70.11
         required: true
 package: egeoffrey-collection-core
-revision: 8
+revision: 9
 tags: collection core
 version: 1.0

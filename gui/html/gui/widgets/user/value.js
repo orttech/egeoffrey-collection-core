@@ -150,15 +150,21 @@ class Value extends Widget {
                 else if (session["widget"] == "status") {
                     tag = tag.replace("_value","")
                     if (data.length == 1) {
+                        var target = "info-box-icon"
+                        var icon_class = "info-box-icon"
+                        if ("variant" in this.widget && this.widget["variant"] == 2) {
+                            target = "small-box"
+                            icon_class = "small-box"
+                        }
                         if (data[0] == 0) {
                             $(tag+"_icon").removeClass().addClass("fa fa-power-off")
-                            if ($(tag+"_color").hasClass("info-box-icon")) $(tag+"_color").removeClass().addClass("info-box-icon bg-red")
+                            if ($(tag+"_color").hasClass(target)) $(tag+"_color").removeClass().addClass(icon_class+" bg-red")
                             // TODO: localize
                             $(tag+"_value").html("OFF")
                         }
                         else if (data[0] == 1) {
                             $(tag+"_icon").removeClass().addClass("fa fa-plug")
-                            if ($(tag+"_color").hasClass("info-box-icon")) $(tag+"_color").removeClass().addClass("info-box-icon bg-green")
+                            if ($(tag+"_color").hasClass(target)) $(tag+"_color").removeClass().addClass(icon_class+" bg-green")
                             $(tag+"_value").html("ON")
                         }
                     } else {

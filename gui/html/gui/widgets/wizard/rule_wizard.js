@@ -371,6 +371,7 @@ class Rule_wizard extends Widget {
                     if (block == null) continue
                     rule["conditions"].push(block)
                 }
+                if (! ("conditions" in rule)) rule["conditions"] = [[]]
                 // save new/updated configuration
                 var message = new Message(gui)
                 message.recipient = "controller/config"

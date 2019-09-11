@@ -45,7 +45,7 @@ class Chatbot extends Widget {
         }(this));
         // initialize the chat box
         this.add_answer_box()
-        this.add_answer({content: "Feel free to ask me anything!", type: "text"})
+        this.add_answer({content: "Sir, Madam, do you require anything of me?", type: "text"})
         // capture all alerter notifications, they will become chat messages
         this.add_inspection_listener("controller/alerter", "*/*", "NOTIFY", "#")
     }
@@ -80,13 +80,14 @@ class Chatbot extends Widget {
     
     // add an answer box to the chat window
     add_answer_box() {
+        // TODO: current time
         var answer_html = '\
             <div class="direct-chat-msg right">\
               <div class="direct-chat-info clearfix">\
                 <span class="direct-chat-name float-right">'+gui.house["name"]+'</span>\
                 <span class="direct-chat-timestamp pull-left">23 Jan 5:37 pm</span>\
               </div>\
-              <i class="direct-chat-img fas fa-2x fa-robot"></i>\
+              <i class="direct-chat-img fas fa-2x fa-concierge-bell"></i>\
               <div class="direct-chat-text" id="'+this.id+'_answer_'+this.answer_count+'">\
                 <i class="fas fa-hourglass-half fa-spin"></i>\
               </div>\
