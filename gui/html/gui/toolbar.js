@@ -129,11 +129,12 @@ class Toolbar extends Widget {
             // set the counter
             $(widget_counter).html(data[0])
             // retrieve the most recent items from the database
+            var alerts_to_retrieve = count >= 10 ? 10 : count
             var message = new Message(gui)
             message.recipient = "controller/db"
             message.command = "GET"
             message.args = severity
-            message.set("start", -count)
+            message.set("start", -alerts_to_retrieve)
             message.set("end", -1)
             message.set("scope", "alerts")
             gui.sessions.register(message, {

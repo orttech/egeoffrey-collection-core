@@ -150,15 +150,7 @@ class Gui extends Module {
 
     // What to do just after connecting
     on_connect() {
-        $("#status").html('<i class="fas fa-circle text-success"></i> '+locale("gui.connected")+'</span>');
-        $("#status").unbind().click(function(this_class) {
-            return function () {
-                // clear stored credentials
-                localStorage.clear()
-                // disconnect
-                this_class.join()
-            };
-        }(this));
+        $("#status").html('<i class="fas fa-circle text-success"></i> '+window.EGEOFFREY_GATEWAY_HOSTNAME+'</span>');
     }
     
     // return true if the current user is authorized to access the item, false otherwise
@@ -182,7 +174,15 @@ class Gui extends Module {
         var user = this.users[this.username]
         if ("password" in user && user["password"] != this.password) this.join()
         $("#user_icon").addClass("fa-"+user["icon"])
-        $("#user_fullname").html(user["fullname"])
+        $("#user_fullname").html('<i class="fas fa-sign-out-alt"></i> '+user["fullname"])
+        $("#user_fullname").unbind().click(function(this_class) {
+            return function () {
+                // clear stored credentials
+                localStorage.clear()
+                // disconnect
+                this_class.join()
+            };
+        }(this));
     }
     
     // What to do after starting

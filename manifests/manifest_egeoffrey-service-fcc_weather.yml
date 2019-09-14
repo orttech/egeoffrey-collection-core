@@ -24,6 +24,6 @@ modules:
         placeholder: 70.11
         required: true
 package: egeoffrey-service-fcc_weather
-revision: 8
+revision: 9
 tags: service weather
 version: 1.0
