@@ -55,7 +55,6 @@ class Logs extends Widget {
         $("#"+this.id+"_clear").unbind().click(function(this_class) {
             return function () {
                 var table = $("#"+this_class.id+"_table").DataTable()
-                console.log(table)
                 table.clear().draw()
             };
         }(this));

@@ -150,21 +150,17 @@ class Gui extends Module {
 
     // What to do just after connecting
     on_connect() {
-        $("#status").html('<i class="fas fa-circle text-success"></i> '+window.EGEOFFREY_GATEWAY_HOSTNAME+'</span>');
+        $("#status").html('<i class="fas fa-circle text-success"></i> <span style="cursor: default">'+window.EGEOFFREY_GATEWAY_HOSTNAME+'</span>');
     }
     
     // return true if the current user is authorized to access the item, false otherwise
-    is_authorized(item) {
-        // check if a restriction  is in place
-        if ("allow" in item) {
-            // for each authorized group, check if the current user belong to one of them
-            for (var group of item["allow"]) {
-                if (! (group in this.groups)) continue
-                if (this.groups[group].includes(this.username)) return true
-            }
-            return false
+    is_authorized(authorized_groups) {
+        // for each authorized group, check if the current user belong to one of them
+        for (var group of authorized_groups) {
+            if (! (group in this.groups)) continue
+            if (this.groups[group].includes(this.username)) return true
         }
-        else return true
+        return false
     }
     
     // check if the user is authenticated
@@ -195,6 +191,7 @@ class Gui extends Module {
         window.onhashchange = function() {
             gui.load_page()
         }
+        // draw menu and top toolbar
         this.menu.draw()
         this.toolbar.draw()
     }

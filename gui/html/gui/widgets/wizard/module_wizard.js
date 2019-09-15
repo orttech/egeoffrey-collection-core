@@ -47,7 +47,7 @@ class Module_wizard extends Widget {
         ')
         // add link to advanced configuration
         var link = this.module_id == null ? "__new__" : this.module_id
-        $("#wizard_body").append('<a id="'+this.id+'_advanced_editor" class="float-right text-primary">Advanced Editor</a>')
+        $("#wizard_body").append('<br><a id="'+this.id+'_advanced_editor" class="float-right text-primary">Advanced Editor</a>')
         $("#"+this.id+"_advanced_editor").unbind().click(function(this_class) {
             return function () {
                 $('#wizard').unbind('hidden.bs.modal')

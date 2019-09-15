@@ -32,6 +32,7 @@ class Menu extends Widget {
                 <button type="button" class="btn btn-sm btn-info d-none" id="menu_edit_cancel"><i class="fas fa-undo"></i> '+locale("menu.edit_cancel")+'</button>\
             </center>\
         ')
+        if (! gui.is_authorized(["house_admins"])) $("#menu_edit").addClass("d-none")
         // get the menu contents
         this.add_configuration_listener("gui/menu/#", "+")
     }
@@ -104,15 +105,15 @@ class Menu extends Widget {
         this.add_menu_item({entry_id: "__notifications", text: "Notifications", icon: "comments", page: "__notifications"}, false)
         sections.unshift({ header: "MY HOUSE"})
         // add admin entries
-        if (gui.is_authorized({allow: ["house_admins"]}) || gui.is_authorized({allow: ["egeoffrey_admins"]})) sections[sections.length] = { header: "ADMINISTRATION"}
-        if (gui.is_authorized({allow: ["house_admins"]})) {
+        if (gui.is_authorized(["house_admins"]) || gui.is_authorized(["egeoffrey_admins"])) sections[sections.length] = { header: "ADMINISTRATION"}
+        if (gui.is_authorized(["house_admins"])) {
             sections[sections.length+1] = { text: "House Admin", order: sections.length+1, section_id: "__house_admin", icon: "user-shield"}
             entries["__house_admin"] = []
             entries["__house_admin"].push({section_id: "__house_admin",  order: 0, entry_id: "house", text: "My House", icon: "home", page: "__house"})
             entries["__house_admin"].push({section_id: "__house_admin",  order: 1, entry_id: "sensors", text: "Sensors", icon: "microchip", page: "__sensors"})
             entries["__house_admin"].push({section_id: "__house_admin",  order: 2, entry_id: "rules", text: "Rules", icon: "brain", page: "__rules"})
         }
-        if (gui.is_authorized({allow: ["egeoffrey_admins"]})) {
+        if (gui.is_authorized(["egeoffrey_admins"])) {
             sections[sections.length+2] = { text: "eGeoffrey Admin", order: sections.length+2, section_id: "__egeoffrey_admin", icon: "toolbox"}
             entries["__egeoffrey_admin"] = []
             entries["__egeoffrey_admin"].push({section_id: "__egeoffrey_admin",  order: 0, entry_id: "packages", text: "Packages", icon: "cubes", page: "__packages"})
@@ -155,7 +156,7 @@ class Menu extends Widget {
                 if (entry == null) continue
                 if (entry["section_id"] != section["section_id"]) continue
                 // add the entry to the menu
-                if (! gui.is_authorized(entry)) continue
+                if ("allow" in entry && ! gui.is_authorized(entry["allow"])) continue
                 this.add_menu_item(entry)
                 items++
             }

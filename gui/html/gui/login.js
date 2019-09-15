@@ -107,12 +107,12 @@ class Login {
                     // pull out the user's data and set the variables
                 window.EGEOFFREY_GATEWAY_HOSTNAME = $("#egeoffrey_gateway_hostname").val()
                 window.EGEOFFREY_GATEWAY_PORT = $("#egeoffrey_gateway_port").val()
-                window.EGEOFFREY_GATEWAY_SSL = $("#egeoffrey_gateway_ssl").is(":checked")
+                window.EGEOFFREY_GATEWAY_SSL = $("#egeoffrey_gateway_ssl").is(":checked") ? 1 : 0
                 window.EGEOFFREY_ID = $("#egeoffrey_id").val()
                 window.EGEOFFREY_PASSCODE = $("#egeoffrey_passcode").val()
                 window.EGEOFFREY_USERNAME = $("#egeoffrey_username").val()
                 window.EGEOFFREY_PASSWORD = $("#egeoffrey_password").val()
-                window.EGEOFFREY_REMEMBER_ME = $("#egeoffrey_remember_me").is(":checked")
+                window.EGEOFFREY_REMEMBER_ME = $("#egeoffrey_remember_me").is(":checked") ? 1 : 0
                     // create a new instance of the gui and run it
                 window.gui = new Gui("gui", EGEOFFREY_USERNAME + "_" + this_class.generate_session_id())
                 window.gui.run()
@@ -153,7 +153,7 @@ class Login {
                 if (!window.gui.connected) {
                     // not connected, stop the current instance of the gui from connecting
                     window.gui.join()
-                        // set login information from previous settings
+                    // set login information from previous settings
                     $("#egeoffrey_gateway_hostname").val(gui.gateway_hostname)
                     $("#egeoffrey_gateway_port").val(gui.gateway_port)
                     if (gui.gateway_ssl) $("#egeoffrey_gateway_ssl").iCheck('check')
@@ -181,12 +181,12 @@ class Login {
         // restore user credentials 
         if (localStorage.getItem("EGEOFFREY_GATEWAY_HOSTNAME") != null) window.EGEOFFREY_GATEWAY_HOSTNAME = localStorage.getItem("EGEOFFREY_GATEWAY_HOSTNAME")
         if (localStorage.getItem("EGEOFFREY_GATEWAY_PORT") != null) window.EGEOFFREY_GATEWAY_PORT = localStorage.getItem("EGEOFFREY_GATEWAY_PORT")
-        if (localStorage.getItem("EGEOFFREY_GATEWAY_SSL") != null) window.EGEOFFREY_GATEWAY_SSL = Boolean(parseInt(localStorage.getItem("EGEOFFREY_GATEWAY_SSL")))
+        if (localStorage.getItem("EGEOFFREY_GATEWAY_SSL") != null) window.EGEOFFREY_GATEWAY_SSL = parseInt(localStorage.getItem("EGEOFFREY_GATEWAY_SSL"))
         if (localStorage.getItem("EGEOFFREY_ID") != null) window.EGEOFFREY_ID = localStorage.getItem("EGEOFFREY_ID")
         if (localStorage.getItem("EGEOFFREY_PASSCODE") != null) window.EGEOFFREY_PASSCODE = localStorage.getItem("EGEOFFREY_PASSCODE")
         if (localStorage.getItem("EGEOFFREY_USERNAME") != null) window.EGEOFFREY_USERNAME = localStorage.getItem("EGEOFFREY_USERNAME")
         if (localStorage.getItem("EGEOFFREY_PASSWORD") != null) window.EGEOFFREY_PASSWORD = localStorage.getItem("EGEOFFREY_PASSWORD")
-        if (localStorage.getItem("EGEOFFREY_REMEMBER_ME") != null) window.EGEOFFREY_REMEMBER_ME = Boolean(parseInt(localStorage.getItem("EGEOFFREY_REMEMBER_ME")))
+        if (localStorage.getItem("EGEOFFREY_REMEMBER_ME") != null) window.EGEOFFREY_REMEMBER_ME = parseInt(localStorage.getItem("EGEOFFREY_REMEMBER_ME"))
         // create a gui and start it
         window.gui = new Gui("gui", "guest_" + this.generate_session_id())
         window.gui.run()

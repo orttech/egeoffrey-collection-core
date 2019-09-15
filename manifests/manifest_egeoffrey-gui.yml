@@ -10,6 +10,6 @@ manifest_schema: 2
 modules:
 - gui/webserver: {}
 package: egeoffrey-gui
-revision: 56
+revision: 57
 tags: gui
 version: 1.0

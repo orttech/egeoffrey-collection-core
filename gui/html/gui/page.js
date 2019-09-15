@@ -41,7 +41,7 @@ class Page {
                 </div>\
             </section>\
         ')
-        if ( ! page_id.startsWith("__")) $("#page_buttons").removeClass("d-none")
+        if ( ! page_id.startsWith("__") && gui.is_authorized(["house_admins"])) $("#page_buttons").removeClass("d-none")
         // if it is a user page, draw the page layout provided by the user
         if (type == "USER") this.draw(page)
         // if it is a system page, build the page layout and draw it
@@ -488,6 +488,10 @@ class Page {
                         <a class="nav-link" id="'+id+'_tab_notifications" data-toggle="pill" href="#'+id+'_tab_notifications_content"  role="tab" aria-controls="'+id+'_tab_notifications_content" aria-selected="false">Notifications</a>\
                     </li>\
                     \
+                    <li class="nav-item">\
+                        <a class="nav-link" id="'+id+'_tab_permissions" data-toggle="pill" href="#'+id+'_tab_permissions_content"  role="tab" aria-controls="'+id+'_tab_permissions_content" aria-selected="false">Permissions</a>\
+                    </li>\
+                    \
                 </ul>\
                 <div class="tab-content">\
                     <div class="tab-pane fade show active" id="'+id+'_tab_general_content" role="tabpanel" aria-labelledby="'+id+'_tab_general">\
@@ -886,10 +890,21 @@ class Page {
                         </div>\
                     </div>\
                     \
+                    <div class="tab-pane fade" id="'+id+'_tab_permissions_content" role="tabpanel" aria-labelledby="'+id+'_tab_permissions">\
+                        <div class="form-group">\
+                            <label>Authorized Groups</label>\
+                            <div id="'+id+'_permissions_groups"></div>\
+                            <br>\
+                            <div class="form-group">\
+                                <button type="button" class="btn btn-default float-right" id="'+id+'_permissions_groups_add"><i class="fas fa-plus"></i> Add Group</button>\
+                            </div>\
+                        </div>\
+                    </div>\
+                    \
                 </div>\
             </form>\
         ')
-        $("#wizard_body").append('<a id="'+id+'_advanced_editor" class="float-right text-primary">Advanced Editor</a>')
+        $("#wizard_body").append('<br><a id="'+id+'_advanced_editor" class="float-right text-primary">Advanced Editor</a>')
         $("#"+id+"_advanced_editor").unbind().click(function(this_class) {
             return function () {
                 $('#wizard').unbind('hidden.bs.modal')
@@ -924,16 +939,29 @@ class Page {
         array_types["control"] = ["actions"]
         array_types["button"] = ["actions"]
         array_types["map"] = ["sensors"]
+        array_types["permissions"] = ["groups"]
         var checkbox_types = {}
         checkbox_types["timeline"] = ["no_range"]
         checkbox_types["map"] = ["tracking"]
         // editing the widget, fill in the values
         if (widget != null) {
-            // common elements
+            // general tab elements
             for (var key of ["title", "size", "widget", "offset"]) {
                 if (! (key in widget)) continue
                 $("#"+id+"_general_"+key).val(widget[key])
             }
+            // permission tab elements
+            if ("allow" in widget) {
+                for (var i = 0; i < widget["allow"].length; i++) {
+                    var value = widget["allow"][i]
+                    this.widget_wizard_add_array_item(id+'_permissions_groups', value)
+                }
+            }
+            $("#"+id+'_permissions_groups_add').unbind().click(function(this_class, id) {
+                return function () {
+                    this_class.widget_wizard_add_array_item(id)
+                };
+            }(this, id+'_permissions_groups'));
             // widget-specific simple elements
             for (var type in simple_types) {
                 if (widget["widget"] == type) {
@@ -979,7 +1007,7 @@ class Page {
                 $("#"+id+"_tabs .nav-link").each(function(e){
                     var nav_id = $(this).attr("id")
                     // always keep general
-                    if (nav_id.endsWith("_general")) return
+                    if (nav_id.endsWith("_general") || nav_id.endsWith("_permissions")) return
                     var is_hidden = $("#"+nav_id).parent('li').hasClass("d-none")
                     // unhide requested tab
                     if (nav_id.endsWith("_"+type)) {
@@ -1001,7 +1029,7 @@ class Page {
             $("#"+id+"_tabs .nav-link").each(function(e){
                 var nav_id = $(this).attr("id")
                 // always keep general
-                if (nav_id.endsWith("_general")) return
+                if (nav_id.endsWith("_general") || nav_id.endsWith("_permissions")) return
                 var is_hidden = $("#"+nav_id).parent('li').hasClass("d-none")
                 // unhide requested tab
                 if (! nav_id.endsWith("_"+type)) {
@@ -1014,11 +1042,17 @@ class Page {
             if ($('#'+id+'_form')[0].checkValidity()) {
                 // build up the data structure
                 var widget = {}
+                // general tab elements
                 for (var item of ["title", "size", "widget", "offset"]) {
                     var value = $("#"+id+"_general_"+item).val()
                     if (value == "") continue
                     widget[item] = $.isNumeric(value) ? parseFloat(value) : value
                 }
+                // permissions tab elements
+                $("#"+id+"_permissions_groups :input[type=text]").each(function(e){
+                    if (! ("allow" in widget)) widget["allow"] = []
+                    widget["allow"].push(this.value)
+                });
                 // widget-specific simple elements
                 for (var type in simple_types) {
                     if (widget["widget"] == type) {
@@ -1130,7 +1164,7 @@ class Page {
                 // add columns
                 for (var column = 0; column < page[row][section].length; column++) {
                     var widget = page[row][section][column]
-                    if (! gui.is_authorized(widget)) continue
+                    if ("allow" in widget && ! gui.is_authorized(widget["allow"])) continue
                     var offset = "offset" in widget ? widget["offset"] : 0
                     // add a new column
                     var id = this.add_column(row, column, widget["size"], offset)

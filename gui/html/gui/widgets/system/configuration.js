@@ -92,7 +92,7 @@ class Configuration extends Widget {
                             <option value="service">Services</option>\
                         </optgroup>\
             '
-            if (! gui.is_authorized({ "allow": ["egeoffrey_admins"]})) egeoffrey_configuration_items = ""
+            if (! gui.is_authorized(["egeoffrey_admins"])) egeoffrey_configuration_items = ""
             var selector = '\
                 <div class="form-group">\
                     <select class="form-control" id="'+this.id+'_selector">\

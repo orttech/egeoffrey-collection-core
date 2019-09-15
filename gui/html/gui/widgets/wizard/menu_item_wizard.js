@@ -51,11 +51,25 @@ class Menu_item_wizard extends Widget {
                     <label>Order*</label>\
                     <input type="text" id="'+this.id+'_order" class="form-control" placeholder="order of this menu item in the section" required>\
                 </div>\
+                <div class="form-group">\
+                    <label>Authorized Groups</label>\
+                    <div id="'+this.id+'_groups"></div>\
+                    <br>\
+                    <div class="form-group">\
+                        <button type="button" class="btn btn-default float-right" id="'+this.id+'_groups_add"><i class="fas fa-plus"></i> Add Group</button>\
+                    </div>\
+                </div>\
             </form>\
         ')
+        // configure add group button
+        $("#"+this.id+'_groups_add').unbind().click(function(this_class, id) {
+            return function () {
+                this_class.add_array_item(id)
+            };
+        }(this, this.id+'_groups'));
         // add link to advanced configuration
         var link = menu_item_id == null ? "__new__" : section_id+"/"+menu_item_id
-        $("#wizard_body").append('<a id="'+this.id+'_advanced_editor" class="float-right text-primary">Advanced Editor</a>')
+        $("#wizard_body").append('<br><a id="'+this.id+'_advanced_editor" class="float-right text-primary">Advanced Editor</a>')
         $("#"+this.id+"_advanced_editor").unbind().click(function(this_class) {
             return function () {
                 $('#wizard').unbind('hidden.bs.modal')
@@ -80,6 +94,10 @@ class Menu_item_wizard extends Widget {
                     if (value == null || value == "") continue
                     menu_item[item] = $.isNumeric(value) ? parseFloat(value) : value
                 }
+                $("#"+this_class.id+"_groups :input[type=text]").each(function(e){
+                    if (! ("allow" in menu_item)) menu_item["allow"] = []
+                    menu_item["allow"].push(this.value)
+                });
                 // save new/updated configuration
                 var message = new Message(gui)
                 message.recipient = "controller/config"
@@ -145,6 +163,37 @@ class Menu_item_wizard extends Widget {
         }
     }
     
+    // return a random number
+    get_random() {
+        var min = 1; 
+        var max = 100000;
+        return Math.floor(Math.random() * (+max - +min)) + +min;
+    }
+    
+    // add an array item to the wizard form
+    add_array_item(id, value="") {
+        var i = this.get_random()
+        var html = '\
+            <div class="row" id="'+id+'_row_'+i+'">\
+                <div class="col-11">\
+                    <input type="text" id="'+id+'_value_'+i+'" class="form-control" value="'+value+'" required>\
+                </div>\
+                <div class="col-1">\
+                    <button type="button" class="btn btn-default">\
+                        <i class="fas fa-times text-red" id="'+id+'_remove_'+i+'"></i>\
+                    </button>\
+                </div>\
+            </div>\
+        '
+        $("#"+id).append(html)
+        // configure remove button
+        $("#"+id+"_remove_"+i).unbind().click(function(id, i) {
+            return function () {
+                $("#"+id+"_row_"+i).remove()
+            };
+        }(id, i));
+    }
+    
     // receive data and load it into the widget
     on_message(message) {
     }
@@ -165,6 +214,12 @@ class Menu_item_wizard extends Widget {
         // populate the form
         for (var item of ["text", "page", "icon", "order"]) {
             if (item in menu_item) $("#"+this.id+"_"+item).val(menu_item[item])
+        }
+        if ("allow" in menu_item) {
+            for (var i = 0; i < menu_item["allow"].length; i++) {
+                var value = menu_item["allow"][i]
+                this.add_array_item(this.id+'_groups', value)
+            }
         }
     }
 }
