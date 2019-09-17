@@ -3,13 +3,27 @@
 // login screen and gui initialization
 class Login {
     constructor() {
+        this.watchdog = null
+        this.draw()
+    }
+    
+    // draw the login form
+    draw() {
         // draw login box
+        $("#login_box").empty()
         $("#login_box").html('\
-            <p class="login-box-msg">'+locale("login.welcome")+'</p>\
+            <span id="login_disclaimer"></span>\
             <form id="login_form">\
                 <div class="card card-primary">\
+                    <div class="has-feedback">\
+                        <select class="form-control" id="language">\
+                            <option value="en">English</option>\
+                        </select>\
+                    </div>\
+                </div>\
+                <div class="card card-primary">\
                     <div class="card-header with-border">\
-                        <h3 class="card-title">'+locale("login.gateway")+'</h3>\
+                        <h3 class="card-title"><i class="fas fa-project-diagram"></i> '+locale("login.gateway")+'</h3>\
                         <div class="card-tools pull-right">\
                             <button type="button" class="btn btn-card-tool" data-widget="collapse"><i class="fa fa-minus"></i>\
                             </button>\
@@ -33,7 +47,7 @@ class Login {
                 </div>\
                 <div class="card card-primary">\
                     <div class="card-header with-border">\
-                        <h3 class="card-title">'+locale("login.house")+'</h3>\
+                        <h3 class="card-title"><i class="fas fa-home"></i> '+locale("login.house")+'</h3>\
 \
                         <div class="card-tools pull-right">\
                             <button type="button" class="btn btn-card-tool" data-widget="collapse"><i class="fa fa-minus"></i>\
@@ -51,7 +65,7 @@ class Login {
                 </div>\
                 <div class="card card-primary">\
                     <div class="card-header with-border">\
-                        <h3 class="card-title">'+locale("login.user")+'</h3>\
+                        <h3 class="card-title"><i class="fas fa-user"></i> '+locale("login.user")+'</h3>\
 \
                         <div class="card-tools pull-right">\
                             <button type="button" class="btn btn-card-tool" data-widget="collapse"><i class="fa fa-minus"></i>\
@@ -97,6 +111,14 @@ class Login {
             radioClass: 'iradio_square-blue',
             increaseArea: '20%'
         });
+        // show disclaimer if needed
+        if ("EGEOFFREY_LOGIN_DISCLAIMER" in window) {
+            $("#login_disclaimer").html('\
+                <div class="callout callout-info">\
+                    <p>'+window.EGEOFFREY_LOGIN_DISCLAIMER+'</p>\
+                </div>\
+            ')
+        }
         // configure login button
         $("#login_button").unbind().click(function(this_class) {
             return function() {
@@ -119,8 +141,19 @@ class Login {
                 login_submit = true
             };
         }(this));
+        // configure language selector
+        $('#language').val(window.language)
+        $('#language').unbind().change(function(this_class) {
+            return function () {
+                var language = $('#language').val()
+                set_language(language)
+                localStorage.setItem("EGEOFFREY_LANGUAGE", language)
+                this_class.draw()
+            };
+        }(this))
         // periodically check if the connection is established, otherwise show login page
-        var watchdog = setInterval(function() {
+        if (this.watchdog != null) clearInterval(this.watchdog)
+        this.watchdog = setInterval(function() {
             $("#login_button").prop("disabled", false)
             $("#login_button").html(locale("login.login_button"))
             var login_screen = $('#login').is(':visible');
@@ -187,6 +220,11 @@ class Login {
         if (localStorage.getItem("EGEOFFREY_USERNAME") != null) window.EGEOFFREY_USERNAME = localStorage.getItem("EGEOFFREY_USERNAME")
         if (localStorage.getItem("EGEOFFREY_PASSWORD") != null) window.EGEOFFREY_PASSWORD = localStorage.getItem("EGEOFFREY_PASSWORD")
         if (localStorage.getItem("EGEOFFREY_REMEMBER_ME") != null) window.EGEOFFREY_REMEMBER_ME = parseInt(localStorage.getItem("EGEOFFREY_REMEMBER_ME"))
+        // restore language setting
+        if (localStorage.getItem("EGEOFFREY_LANGUAGE") != null) {
+            set_language(localStorage.getItem("EGEOFFREY_LANGUAGE"))
+            this.draw()
+        }
         // create a gui and start it
         window.gui = new Gui("gui", "guest_" + this.generate_session_id())
         window.gui.run()

@@ -8,8 +8,9 @@ github: egeoffrey/egeoffrey-gui
 icon: columns
 manifest_schema: 2
 modules:
-- gui/webserver: {}
+- gui/webserver:
+    description: Runs the webserver serving eGeoffrey's web interface
 package: egeoffrey-gui
-revision: 57
+revision: 60
 tags: gui
 version: 1.0

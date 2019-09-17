@@ -47,6 +47,6 @@ modules:
       name: template
       required: true
 package: egeoffrey-notification-smtp
-revision: 9
+revision: 10
 tags: notification email
 version: 1.0

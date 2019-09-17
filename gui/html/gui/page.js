@@ -312,7 +312,7 @@ class Page {
     // add column
    add_column(row, column, size, offset) {
         var id = "widget_"+row+"_"+column
-        $("#row_"+row).append('<section class="col-lg-'+size+' col-md-offset-'+offset+'" id="'+id+'"></section>')
+        $("#row_"+row).append('<section class="col-lg-'+size+' offset-md-'+offset+'" id="'+id+'"></section>')
         return id
     }
     
@@ -1324,7 +1324,7 @@ class Page {
         if (widget_object != null) {
             // resize the widget if necessary
             var offset = "offset" in widget ? widget["offset"] : 0
-            $("#"+id).removeClass().addClass("col-lg-"+widget["size"]).addClass("col-md-offset-"+offset)
+            $("#"+id).removeClass().addClass("col-lg-"+widget["size"]).addClass("offset-md-"+offset)
             // load the data
             widget_object.draw()
             // configure the refresh button

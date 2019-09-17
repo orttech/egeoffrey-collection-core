@@ -122,15 +122,20 @@ class Logs extends Widget {
             message.recipient = "controller/db"
             message.command = "GET"
             message.args = severity
-            message.set("timeframe", "last_5_days")
+            message.set("timeframe", "last_24_hours")
             message.set("scope", "logs")
             message.set("max_items", 500)
             gui.sessions.register(message, {
             })
             this.send(message)
         }
-        // subscribe for new logs
-        this.listener = this.add_inspection_listener("+/+", "controller/logger", "LOG", "#")
+        // wait a bit
+        setTimeout(function(this_class) {
+            return function() {
+                // subscribe for new logs
+                this_class.listener = this_class.add_inspection_listener("+/+", "controller/logger", "LOG", "#")
+            };
+        }(this), 5*1000);
     }
 
     // format the severity

@@ -21,13 +21,27 @@ The following modules are included in this package.
 For each module, if requiring a configuration file to start, its settings will be listed under *'Module configuration'*. Additionally, if the module is a service, the configuration expected to be provided by each registered sensor associated to the service is listed under *'Service configuration'*.
 
 To configure each module included in this package, once started, click on the *'Edit Configuration'* button on the *'eGeoffrey Admin'* / *'Modules'* page of your eGeoffrey instance.
-- **controller/logger**: 
-- **controller/db**: 
-- **controller/config**: 
-- **controller/alerter**: 
-- **controller/chatbot**: 
-- **controller/hub**: 
-- **gui/webserver**: 
+- **controller/logger**: takes care of collecting the logs from all the local and remote modules, storing them in the database and printing them out
+  - Module configuration:
+    - *retention**: number of days to keep old logs in the database (e.g. 6)
+- **controller/db**: connects to the database and runs queries on behalf of other modules
+  - Module configuration:
+    - *hostname**: the IP/hostname the Redis database is listening to (e.g. egeoffrey-database)
+    - *port**: the port the Redis database is listening to (e.g. 6379)
+    - *database**: the database number to use for storing the information (e.g. 1)
+- **controller/config**: stores configuration files on behalf of all the modules and makes them available
+- **controller/alerter**: keep running the configured rules which would trigger notifications
+  - Module configuration:
+    - *retention**: number of days to keep old logs in the database (e.g. 6)
+- **controller/chatbot**: interactive chatbot service
+  - Module configuration:
+    - *vocabulary**: chatbot's basic vocabulary
+- **controller/hub**: hub for collecting new measures from sensors
+  - Module configuration:
+    - *calculate**: aggregation policies that can be associated to sensors to e.g. automatically calculate average, minimum and maximum per hour/day
+    - *retain**: retention policies that can be associated to sensors to e.g. automatically purge old values from the database
+    - *post_processors**: set of available post processing commands that can be associated to sensors to e.g. automatically post-process a new value once collected
+- **gui/webserver**: runs the webserver serving eGeoffrey's web interface
 - **interaction/slack**: connect to a slack channel as a bot and interact with the user
   - Module configuration:
     - *bot_token**: the Slack legacy token the chatbot will use to connect to Slack
@@ -171,4 +185,4 @@ collection core
 
 ## Version
 
-The version of this egeoffrey-collection-core is 1.0-13 on the development branch.
+The version of this egeoffrey-collection-core is 1.0-14 on the development branch.

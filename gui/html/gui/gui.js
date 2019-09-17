@@ -10,7 +10,6 @@ class Gui extends Module {
         $("#wizard_close").html(locale("gui.wizard.close"))
         $("#wizard_delete").html(locale("gui.wizard.delete"))
         $("#wizard_save").html(locale("gui.wizard.save"))
-        $("#version").html(locale("gui.version_text"))
         // map a subscribed topic with an array of widgets
         this.listeners = {}
         // map a requested configuration with its content (since a retained message, we need to keep track)

@@ -1,9 +1,9 @@
-// language helpers
-var language = "en"
+// global variable to store current language
+window.language = null
 
-var languages = {}  
+// for each language map the placeholder to a string
+var languages = {} 
 languages["en"] = {
-    "login.welcome": "Welcome to eGeoffrey!",
     "login.gateway": "Gateway",
     "login.gateway.hostname": "eGeoffrey Gateway",
     "login.gateway.port": "Port",
@@ -24,7 +24,6 @@ languages["en"] = {
     "gui.wizard.close": "Close",
     "gui.wizard.delete": "Delete",
     "gui.wizard.save": "Save",
-    "gui.version_text": "Version",
     
     "toolbar.view_all": "View All",
     
@@ -45,13 +44,14 @@ languages["en"] = {
     
 }
 
+// return the locale of the provided placeholder
 function locale(id, args=null) {
     // get the corresponding text
     var text = null
-    if (id in languages[language]) text = languages[language][id]
-    else if (id in languages["en"]) text = languages[language][id]
+    if (id in languages[window.language]) text = languages[window.language][id]
+    else if (id in languages["en"]) text = languages["en"][id]
     if (text == null) {
-        console.log("unable to apply locale to "+id)
+        console.log("unable to apply locale to "+id+" ("+window.language+")")
         return ""
     }
     // apply replacement if needed
@@ -62,3 +62,12 @@ function locale(id, args=null) {
     }
     return text
 }
+
+// set current language
+function set_language(language) {
+    if (language in languages) window.language = language
+    else window.language = "en"
+}
+
+// set the default language
+set_language(window.EGEOFFREY_LANGUAGE)
