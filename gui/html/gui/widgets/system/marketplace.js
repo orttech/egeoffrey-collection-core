@@ -5,6 +5,7 @@ class Marketplace extends Widget {
         this.marketplace_url = "https://api.github.com/repos/egeoffrey/egeoffrey-marketplace/contents/marketplace"
         this.marketplace_branch = "master"
         this.manifests = []
+        this.tags = []
         this.packages_branch = "development"
         // add an empty box into the given column
         this.add_large_box(this.id, this.widget["title"])
@@ -42,10 +43,17 @@ class Marketplace extends Widget {
                             return
                         }
                         if (manifest["manifest_schema"] != gui.supported_manifest_schema) return
-                        // define tags
+                        // draw tags
                         var tags = manifest["tags"].split(" ")
                         var tags_html = ""
-                        for (var tag of tags) tags_html = tags_html+'<a onClick=\'$("#'+this_class.id+'_search").val("'+tag+'"); $("#'+this_class.id+'_search").keyup()\'><span class="badge badge-info">'+tag+'</span></a>&nbsp;'
+                        for (var tag of tags) {
+                            var this_tag_html = '<a style="cursor: pointer" onClick=\'$("#'+this_class.id+'_search").val("'+tag+'"); $("#'+this_class.id+'_search").keyup()\'><span class="badge badge-info">'+tag+'</span></a>&nbsp;'
+                            if (! this_class.tags.includes(tag)) {
+                                $("#"+this_class.id+"_marketplace_tags").append(this_tag_html)
+                                this_class.tags.push(tag)
+                            }
+                            tags_html = tags_html+this_tag_html
+                        }
                         // define modules
                         var modules = []
                         if (manifest["modules"].length > 0) {
@@ -90,6 +98,7 @@ class Marketplace extends Widget {
         // IDs Widget: _table
         var body = "#"+this.id+"_body"
         this.manifests = []
+        this.tags = []
         $(body).empty()
         var search_html = '\
             <div class="input-group">\
@@ -122,6 +131,7 @@ class Marketplace extends Widget {
                 }
             };
         }(this));
+        $(body).append('<div><span id="'+this.id+'_marketplace_tags"></span></div><hr>')
         $(body).append('<ul class="products-list product-list-in-card pl-2 pr-2" id="'+this.id+'_marketplace"><li><i class="fas fa-spin fa-3x fa-spinner"></i> Loading marketplace...</li></ul>')
         this.load_marketplace()
     }
