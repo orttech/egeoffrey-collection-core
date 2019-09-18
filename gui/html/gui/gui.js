@@ -56,7 +56,7 @@ class Gui extends Module {
         // scheduler's events
         this.scheduler_events = []
         // check for updates after login
-        this.check_for_updates = false
+        this.check_for_updates = true
         // safeguard, if not receiving a configuration file timely, disconnect
         setTimeout(function(this_class) {
             return function() {
@@ -74,7 +74,7 @@ class Gui extends Module {
             "closeButton": false,
             "preventDuplicates": true,
             "hideDuration": "500",
-            "timeOut": "3000",
+            "timeOut": "4000",
         }
         toastr[type](message)
 	}
@@ -180,6 +180,55 @@ class Gui extends Module {
         }(this));
     }
     
+    // animate the logo
+    animate_logo() {
+        var element = $("#logo");
+        var duration = 200
+        var deg = 15
+        var target_degrees = deg;
+        $({degrees: target_degrees - deg}).animate({degrees: target_degrees}, {
+            duration: duration,
+            step: function(now) {
+                element.css({
+                    transform: 'rotate(' + now + 'deg)'
+                });
+            },
+            complete: function() {
+                var target_degrees = 0;
+                $({degrees: target_degrees + deg}).animate({degrees: target_degrees}, {
+                    duration: duration,
+                    step: function(now) {
+                        element.css({
+                            transform: 'rotate(' + now + 'deg)'
+                        });
+                    },
+                    complete: function() {
+                        var target_degrees = - deg;
+                        $({degrees: target_degrees + deg}).animate({degrees: target_degrees}, {
+                            duration: duration,
+                            step: function(now) {
+                                element.css({
+                                    transform: 'rotate(' + now + 'deg)'
+                                });
+                            },
+                            complete: function() {
+                                var target_degrees = 0;
+                                $({degrees: target_degrees - deg}).animate({degrees: target_degrees}, {
+                                    duration: duration,
+                                    step: function(now) {
+                                        element.css({
+                                            transform: 'rotate(' + now + 'deg)'
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+    
     // What to do after starting
     on_start() {
         // ensure the user is authenticated
@@ -193,6 +242,8 @@ class Gui extends Module {
         // draw menu and top toolbar
         this.menu.draw()
         this.toolbar.draw()
+        // animate the logo icon
+        this.animate_logo()
     }
         
     // What to do when exiting

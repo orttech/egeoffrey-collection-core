@@ -175,10 +175,20 @@ class Page {
             else if (page_id == "__welcome") {
                 var page_layout = [
                   {
-                    "eGeoffrey, your personal e-servant software": [
+                    "I'm eGeoffrey, your e-butler": [
                       {
                         "size": 12,
-                        "text": "You can configure your rules from the <a href='#house_admin/rules'>RULES</a> menu item on the left to trigger notifications generating E-mail, Slack alerts, SMS messages, etc. whenever a configured condition is met.<br>Notifications can also be reviewed from the web interface thorugh the widgets below.",
+                        "title": "Welcome!",
+                        "text": "Through the eGeoffrey's web user interface you can control any aspect of your <b>personal e-butler</b>. It is the easiest and simplest way to <b>configure</b> your eGeoffrey's instance, register new <b>sensors</b>, <b>view your data</b>, control your <b>actuators</b>, configure <b>rules</b> which will trigger one or more notification upon specific conditions. And how data is displayed is completely up to you, you can <b>organize</b> your contents in the way you like the most and create new, custom pages. No need to edit complicated configuration files, everything can be accomplished from here!<br><br>If you are an admin, start by giving your house a name and tell eGeoffrey in which timezone and where you live through the <a href='#__house'>HOUSE SETTINGS</a> configuration page.",
+                        "widget": "text"
+                      }
+                    ]
+                  },
+                  {
+                    "Notifications and Rules": [
+                    {
+                        "size": 12,
+                        "text": "Let's have a look if we have any interesting <b>notifications</b>. Notifications are generated whenever a configured rule triggers. If for example you want to be notified whenever the temperature of you refrigerator is too high, create a rule, schedule its execution and whenever the temperature will be higher than a configured threshold you will be notified. If you are an admin, you can configure your rules from the <a href='#__rules'>RULES</a> page so to trigger notifications generating <b>E-mail, Slack alerts, SMS messages, etc.</b> whenever a configured condition is met. Notifications can also be reviewed from the web interface thorugh the widgets below.",
                         "title": "Create your rules and receive notifications",
                         "widget": "text"
                       }
@@ -222,7 +232,23 @@ class Page {
                     "Your Sensors": [
                       {
                         "size": 12,
-                        "text": "Before data can be displayed here or used in a rule, a sensor has to be created through the <a href='#house_admin/sensors'>SENSORS</a> menu item on the left.<br>A sensor in eGeoffrey is a logical container of one or more values: it can hold just a single piece of data or a timeseries. Sensor's values can come from an associated service (e.g. a url with an image, a command to run, etc.), from actions associated to rules or from your interaction with widgets on this interface.<br>Once a sensor is created and data starts to get in, you can create a custom page to present values in many ways in this interface (see the <a href='#examples/widgets'>Widget Showcase</a> page for examples).<br>Live interaction is also supported thorugh your personal housebot who will take care of your house on your behalf. No need to configure anything, based on the rules and sensors you have configured the housebot will be able to answer any question you could have! The same level of interaction is also possible through Slack when you are away from Home.",
+                        "title": "Easily connect your sensors",
+                        "text": "Before data can be displayed here or used in a rule, a sensor has to be created. A sensor in eGeoffrey is a sort of <b>dataset</b>, a logical container of <b>one or more values</b>: it can hold just a single piece of data or a timeseries. Sensor's values can come from an <b>associated service</b> (e.g. a url with an image, a command to run, etc.), from <b>actions triggered by a rule</b> or from your <b>interaction with widgets</b> on this interface. If you are an admin, you can review existing sensors and register new ones through the <a href='#__sensors'>SENSORS</a> page. But no need to start from scratch, every time you add a new module, pages with <b>default content and sensor examples</b> are deployed as well!<br><br>Let's have a look what's going on now and which <b>data has recently come in</b> from your sensors. No need to refresh anything, whenever a new value comes in will be immediately shown up at the top of the table!",
+                        "widget": "text"
+                      },
+                      {
+                        "show_only": "value",
+                        "size": 12,
+                        "title": "Latest Data from your sensors",
+                        "widget": "notifications"
+                      }
+                    ]
+                  },
+                  {
+                    "Live Your User Experience": [
+                      {
+                        "size": 12,
+                        "text": "Once a sensor is created and data starts to get in, you can customize or <b>create custom pages</b> to present values in a number of ways trhough this interface (see the <a href='#examples/widgets'>Widget Showcase</a> page for examples) to put in place beautiful dashboards!.<br>If you are an admin, just click on the '<i>Edit Page</i>' button on the top right of the page to <b>edit existing widgets</b>, add a new one, <b>change the layout</b> of the page by simply dragging and dropping widgets around.<br> If you create a <b>new page</b> (through the '<i>New Page</i>' button on top of a page), this has to be <b>added to the menu</b> on the left to be easily accessible. To do so, if an admin, click on the '<i>Edit Menu</i>' button just below the menu, and <b>add a menu item</b> referencing the new page if you want to associate it to an existing section or create a <b>new section</b> first which will then hold your menu item.",
                         "title": "Easily connect your sensors and interact with eGeoffrey in realtime",
                         "widget": "text"
                       }
@@ -232,18 +258,24 @@ class Page {
                     "": [
                       {
                         "size": 12,
-                        "title": "Your Personal Housebot",
+                        "title": "Interact with eGeoffrey in realtime",
+                        "widget": "text",
+                        "text": "Yes, you can <b>interact</b> with eGeoffrey. He is not the most easygoing entity but knows his stuff. <br><br>Say hi to him, ask about your registered sensors, trigger interactively your configured rules, eGeoffrey will do his best to <b>answer accordingly</b>! eGeoffrey is your e-butler who will take care of your house on your behalf <b>no need to configure anything</b>! The same level of interaction is also possible through <b>Slack</b> and other means by plugging in additional packages."
+                      },
+                      {
+                        "size": 12,
+                        "title": "Meet eGeoffrey",
                         "widget": "chatbot"
                       }
                     ]
                   },
                   {
-                    "": [
+                    "Still Not Enough?": [
                       {
-                        "show_only": "value",
                         "size": 12,
-                        "title": "Latest Data",
-                        "widget": "notifications"
+                        "title": "Add New Skills",
+                        "text": "eGeoffrey skills' are endless and, whatever skills you have in mind, eGeoffrey will <b>learn</b> them and will use them to satisfy your needs with its best smile. And maybe another user has already taught his eGeoffrey to do exactly what you needed. If you are an admin, visit the <a href='#__marketplace'>MARKETPLACE</a> where our community constantly publishes <b>new and interesting contents</b> to enhance eGeofrrey's capabilities, add new ways for interacting with him, new notification mechanism and integration with third party services and tools!",
+                        "widget": "text"
                       }
                     ]
                   }

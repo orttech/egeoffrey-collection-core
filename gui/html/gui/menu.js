@@ -55,34 +55,38 @@ class Menu extends Widget {
         // add the entry
         var page_tag = entry["page"].replaceAll("/","_")
         var tag = add_to_section ? "#menu_section_"+entry["section_id"] : "#"+this.id
+        var href = "url" in entry ? entry["url"] : "#"+entry["page"]
+        var target = "url" in entry ? "target=_blank" : ""
         $(tag).append('\
         <li class="nav-item">\
-            <a class="nav-link" id="menu_user_item_'+page_tag+'" href="#'+entry["page"]+'">&nbsp;\
+            <a class="nav-link" id="menu_user_item_'+page_tag+'" href="'+href+'" '+target+'>&nbsp;\
                 <input type="text" value="'+entry["page"]+'" class="d-none" id="menu_user_item_'+page_tag+'_id">\
                 <i class="nav-icon fas fa-'+entry["icon"]+'" id="menu_user_item_'+page_tag+'_icon"></i>\
                 <p>'+capitalizeFirst(entry["text"])+'</p>\
             </a>\
         </li>');
         // open the page on click
-        $("#menu_user_item_"+page_tag).unbind().click(function(page, section_id, page_tag){
-            return function () {
-                // if clicking on the current page, explicitly reload it since hash will not change
-                if (location.hash.replace("#","") == page) gui.load_page(page)
-                window.scrollTo(0,0)
-                // close active section
-                $("#menu li").removeClass("active menu-open")
-                // remove active section
-                $("#menu li a").removeClass("active")
-                // open new section
-                $("#menu_section_"+section_id+"_tree").addClass("active menu-open")
-                // make new section as active
-                $("#menu_section_"+section_id+"_name").addClass("active")
-                // set item as active
-                $("#menu_user_item_"+page_tag).addClass("active")
-                // collapse the sidebar if open on mobile
-                if ($("body").hasClass('sidebar-open')) $("body").removeClass('sidebar-open').removeClass('sidebar-collapse').trigger('collapsed.pushMenu');
-            }
-        }(entry["page"], entry["section_id"], page_tag));
+        if (! ("url" in entry)) {
+            $("#menu_user_item_"+page_tag).unbind().click(function(page, section_id, page_tag){
+                return function () {
+                    // if clicking on the current page, explicitly reload it since hash will not change
+                    if (location.hash.replace("#","") == page) gui.load_page(page)
+                    window.scrollTo(0,0)
+                    // close active section
+                    $("#menu li").removeClass("active menu-open")
+                    // remove active section
+                    $("#menu li a").removeClass("active")
+                    // open new section
+                    $("#menu_section_"+section_id+"_tree").addClass("active menu-open")
+                    // make new section as active
+                    $("#menu_section_"+section_id+"_name").addClass("active")
+                    // set item as active
+                    $("#menu_user_item_"+page_tag).addClass("active")
+                    // collapse the sidebar if open on mobile
+                    if ($("body").hasClass('sidebar-open')) $("body").removeClass('sidebar-open').removeClass('sidebar-collapse').trigger('collapsed.pushMenu');
+                }
+            }(entry["page"], entry["section_id"], page_tag));
+        }
         // open up the section containing the selected menu item
         if (selected != null && selected == entry["page"]) {
             // set section as active
@@ -100,21 +104,21 @@ class Menu extends Widget {
         // clone sections and entries objects
         var sections = this.sections.slice()
         var entries = jQuery.extend({ }, this.entries)
-        // add welcome entries
+        // add welcome and notifications entries on top
         this.add_menu_item({entry_id: "__welcome", text: "Welcome", icon: "robot", page: "__welcome"}, false)
         this.add_menu_item({entry_id: "__notifications", text: "Notifications", icon: "comments", page: "__notifications"}, false)
         sections.unshift({ header: "MY HOUSE"})
         // add admin entries
         if (gui.is_authorized(["house_admins"]) || gui.is_authorized(["egeoffrey_admins"])) sections[sections.length] = { header: "ADMINISTRATION"}
         if (gui.is_authorized(["house_admins"])) {
-            sections[sections.length+1] = { text: "House Admin", order: sections.length+1, section_id: "__house_admin", icon: "user-shield"}
+            sections[sections.length+1] = { text: "House", order: sections.length+1, section_id: "__house_admin", icon: "user-shield"}
             entries["__house_admin"] = []
-            entries["__house_admin"].push({section_id: "__house_admin",  order: 0, entry_id: "house", text: "My House", icon: "home", page: "__house"})
+            entries["__house_admin"].push({section_id: "__house_admin",  order: 0, entry_id: "house", text: "Settings", icon: "home", page: "__house"})
             entries["__house_admin"].push({section_id: "__house_admin",  order: 1, entry_id: "sensors", text: "Sensors", icon: "microchip", page: "__sensors"})
             entries["__house_admin"].push({section_id: "__house_admin",  order: 2, entry_id: "rules", text: "Rules", icon: "brain", page: "__rules"})
         }
         if (gui.is_authorized(["egeoffrey_admins"])) {
-            sections[sections.length+2] = { text: "eGeoffrey Admin", order: sections.length+2, section_id: "__egeoffrey_admin", icon: "toolbox"}
+            sections[sections.length+2] = { text: "eGeoffrey", order: sections.length+2, section_id: "__egeoffrey_admin", icon: "toolbox"}
             entries["__egeoffrey_admin"] = []
             entries["__egeoffrey_admin"].push({section_id: "__egeoffrey_admin",  order: 0, entry_id: "packages", text: "Packages", icon: "cubes", page: "__packages"})
             entries["__egeoffrey_admin"].push({section_id: "__egeoffrey_admin",  order: 1, entry_id: "modules", text: "Modules", icon: "server", page: "__modules"})
@@ -124,6 +128,13 @@ class Menu extends Widget {
             entries["__egeoffrey_admin"].push({section_id: "__egeoffrey_admin",  order: 5, entry_id: "gateway", text: "Gateway", icon: "project-diagram", page: "__gateway"})
             entries["__egeoffrey_admin"].push({section_id: "__egeoffrey_admin",  order: 6, entry_id: "configuration", text: "Advanced Editor", icon: "edit", page: "__configuration"})
             entries["__egeoffrey_admin"].push({section_id: "__egeoffrey_admin",  order: 7, entry_id: "icons", text: "Icons", icon: "palette", page: "__icons"})
+        }
+        if (gui.is_authorized(["house_admins"]) || gui.is_authorized(["egeoffrey_admins"])) {
+            sections[sections.length+3] = { text: "Help", order: sections.length+3, section_id: "__help", icon: "question-circle"}
+            entries["__help"] = []
+            entries["__help"].push({section_id: "__help",  order: 0, entry_id: "__docs", text: "Docs", icon: "book-open", url: "https://docs.egeoffrey.com", page: "__docs"})
+            entries["__help"].push({section_id: "__help",  order: 0, entry_id: "__forum", text: "Forum", icon: "comments", url: "https://forum.egeoffrey.com", page: "__forum"})
+            entries["__help"].push({section_id: "__help",  order: 0, entry_id: "__developer", text: "Developers", icon: "code", url: "https://developer.egeoffrey.com", page: "__developer"})
         }
         // draw the menu
         for (var section of sections) {
@@ -140,7 +151,7 @@ class Menu extends Widget {
                 <li class="nav-item has-treeview" id="menu_section_'+section["section_id"]+'_tree">\
                     <a href="#" class="nav-link" id="menu_section_'+section["section_id"]+'_name">\
                         <input type="text" value="'+section["section_id"]+'" class="d-none" id="menu_section_'+section["section_id"]+'_id">\
-                        <i class="'+section_icon+'" id="menu_section_'+section["section_id"]+'_icon"></i> \
+                        <i class="'+section_icon+' nav-icon" id="menu_section_'+section["section_id"]+'_icon"></i> \
                         <p>\
                             '+section["text"]+'\
                             <i class="fa fa-angle-left right" id="menu_section_'+section["section_id"]+'_arrow"></i>\
@@ -182,6 +193,7 @@ class Menu extends Widget {
                 });
                 $("#"+this_class.id+" > li > a").each(function(e){
                     var id = this.id.replace("_name", "")
+                    if (id.includes("__")) return
                     // change the icon of each menu item
                     var section_id = $("#"+id+"_id").val()
                     $("#"+id+"_icon").removeClass().addClass("fas fa-edit")
@@ -205,6 +217,7 @@ class Menu extends Widget {
                 $("#"+this_class.id+" > li > ul > li > a").each(function(e){
                     // change the icon of each menu item
                     var menu_item_id = $("#"+this.id+"_id").val()
+                    if (menu_item_id.includes("__")) return
                     $("#"+this.id+"_icon").removeClass().addClass("fas fa-edit")
                     // change anchor href to menu item wizard                    
                     $("#"+this.id).attr("href", "#__menu_item_wizard="+menu_item_id)
