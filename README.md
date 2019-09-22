@@ -185,4 +185,4 @@ collection core
 
 ## Version
 
-The version of this egeoffrey-collection-core is 1.0-17 on the development branch.
+The version of this egeoffrey-collection-core is 1.0-18 on the development branch.
