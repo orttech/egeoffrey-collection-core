@@ -1,4 +1,4 @@
-branch: development
+branch: master
 description: Run system commands, useful to e.g. interact with a utility which communicates
   with a sensor
 dockerhub: egeoffrey/egeoffrey-service-command
@@ -22,6 +22,6 @@ modules:
         placeholder: uptime
         required: true
 package: egeoffrey-service-command
-revision: 12
+revision: 13
 tags: service command os
 version: 1.0

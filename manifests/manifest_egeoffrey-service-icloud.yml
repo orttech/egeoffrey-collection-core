@@ -1,4 +1,4 @@
-branch: development
+branch: master
 description: Retrieve position of a device from Apple icloud service
 dockerhub: egeoffrey/egeoffrey-service-icloud
 github: egeoffrey/egeoffrey-service-icloud
@@ -24,6 +24,6 @@ modules:
         placeholder: my_iPhone
         required: true
 package: egeoffrey-service-icloud
-revision: 12
+revision: 13
 tags: service apple position
 version: 1.0

@@ -1,4 +1,4 @@
-branch: development
+branch: master
 description: Retrieve values from a csv file
 dockerhub: egeoffrey/egeoffrey-service-csv
 github: egeoffrey/egeoffrey-service-csv
@@ -41,6 +41,6 @@ modules:
         name: prefix
         required: false
 package: egeoffrey-service-csv
-revision: 12
+revision: 13
 tags: service csv
 version: 1.0

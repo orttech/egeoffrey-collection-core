@@ -1,4 +1,4 @@
-branch: development
+branch: master
 description: Retrieve weather information from Free Code Camp Weather API
 dockerhub: egeoffrey/egeoffrey-service-fcc_weather
 github: egeoffrey/egeoffrey-service-fcc_weather
@@ -24,6 +24,6 @@ modules:
         placeholder: 70.11
         required: true
 package: egeoffrey-service-fcc_weather
-revision: 10
+revision: 11
 tags: service weather
 version: 1.0

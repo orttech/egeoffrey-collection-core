@@ -1,4 +1,4 @@
-branch: development
+branch: master
 container_config:
   environment:
   - EGEOFFREY_LOGGING_LOCAL=0
@@ -401,6 +401,6 @@ modules:
         placeholder: 70.11
         required: true
 package: egeoffrey-collection-core
-revision: 18
+revision: 19
 tags: collection core
 version: 1.0

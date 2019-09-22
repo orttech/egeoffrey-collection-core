@@ -152,10 +152,6 @@ class Page {
                 var page_layout = [ { "": [ { "title": "Log Inspector", "size": 12, "widget": "__logs" } ] } ]
                 this.draw(page_layout)
             }
-            else if (page_id == "__marketplace") {
-                var page_layout = [ { "": [ { "title": "Marketplace", "size": 12, "widget": "__marketplace" } ] } ]
-                this.draw(page_layout)
-            }
             else if (page_id == "__modules") {
                 var page_layout = [ { "": [ { "title": "Modules", "size": 12, "widget": "__modules" } ] } ]
                 this.draw(page_layout)
@@ -274,7 +270,7 @@ class Page {
                       {
                         "size": 12,
                         "title": "Add New Skills",
-                        "text": "eGeoffrey skills' are endless and, whatever skills you have in mind, eGeoffrey will <b>learn</b> them and will use them to satisfy your needs with its best smile. And maybe another user has already taught his eGeoffrey to do exactly what you needed. If you are an admin, visit the <a href='#__marketplace'>MARKETPLACE</a> where our community constantly publishes <b>new and interesting contents</b> to enhance eGeofrrey's capabilities, add new ways for interacting with him, new notification mechanism and integration with third party services and tools!",
+                        "text": "eGeoffrey skills' are endless and, whatever skills you have in mind, eGeoffrey will <b>learn</b> them and will use them to satisfy your needs with its best smile. And maybe another user has already taught his eGeoffrey to do exactly what you needed. If you are an admin, visit the <a href='https://marketplace.egeoffrey.com'>MARKETPLACE</a> where our community constantly publishes <b>new and interesting contents</b> to enhance eGeofrrey's capabilities, add new ways for interacting with him, new notification mechanism and integration with third party services and tools!",
                         "widget": "text"
                       }
                     ]
@@ -1333,7 +1329,6 @@ class Page {
         else if (widget["widget"] == "__icons") widget_object = new Icons(id, widget)
         else if (widget["widget"] == "__database") widget_object = new Database(id, widget)
         else if (widget["widget"] == "__gateway") widget_object = new Gateway(id, widget)
-        else if (widget["widget"] == "__marketplace") widget_object = new Marketplace(id, widget)
         else if (widget["widget"] == "__house") widget_object = new House(id, widget)
         else gui.log_error("unknown widget "+JSON.stringify(widget))
         if (widget_object != null) this.widget_objects[id] = widget_object

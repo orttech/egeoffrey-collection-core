@@ -1,4 +1,4 @@
-branch: development
+branch: master
 description: An All-In-One collection of the core eGeoffrey packages
 dockerhub: egeoffrey/egeoffrey-collection-core
 github: egeoffrey/egeoffrey-collection-core

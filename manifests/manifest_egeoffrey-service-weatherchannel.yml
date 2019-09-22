@@ -1,4 +1,4 @@
-branch: development
+branch: master
 description: Retrieve weather information from weatherchannel
 dockerhub: egeoffrey/egeoffrey-service-weatherchannel
 github: egeoffrey/egeoffrey-service-weatherchannel
@@ -29,6 +29,6 @@ modules:
         placeholder: 70.11
         required: true
 package: egeoffrey-service-weatherchannel
-revision: 12
+revision: 13
 tags: service weather alert
 version: 1.0

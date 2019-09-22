@@ -1,4 +1,4 @@
-branch: development
+branch: master
 description: Connect to a slack channel as a bot and interact with the user
 dockerhub: egeoffrey/egeoffrey-interaction-slack
 github: egeoffrey/egeoffrey-interaction-slack
@@ -23,6 +23,6 @@ modules:
       placeholder: channel_name
       required: true
 package: egeoffrey-interaction-slack
-revision: 9
+revision: 10
 tags: interaction slack
 version: 1.0

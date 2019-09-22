@@ -1,4 +1,4 @@
-branch: development
+branch: master
 description: Send out email notifications
 dockerhub: egeoffrey/egeoffrey-notification-smtp
 github: egeoffrey/egeoffrey-notification-smtp
@@ -47,6 +47,6 @@ modules:
       name: template
       required: true
 package: egeoffrey-notification-smtp
-revision: 10
+revision: 11
 tags: notification email
 version: 1.0

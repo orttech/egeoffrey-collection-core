@@ -1,4 +1,4 @@
-branch: development
+branch: master
 description: Retrieve earthquake information
 dockerhub: egeoffrey/egeoffrey-service-earthquake
 github: egeoffrey/egeoffrey-service-earthquake
@@ -20,6 +20,6 @@ modules:
         placeholder: minmag=7
         required: true
 package: egeoffrey-service-earthquake
-revision: 22
+revision: 23
 tags: service earthquake
 version: 1.0

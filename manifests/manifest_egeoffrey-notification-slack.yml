@@ -1,4 +1,4 @@
-branch: development
+branch: master
 description: Send a notification through slack
 dockerhub: egeoffrey/egeoffrey-notification-slack
 github: egeoffrey/egeoffrey-notification-slack
@@ -23,6 +23,6 @@ modules:
       placeholder: channel_name
       required: true
 package: egeoffrey-notification-slack
-revision: 9
+revision: 10
 tags: notification slack
 version: 1.0
