@@ -29,6 +29,9 @@ class Module_wizard extends Widget {
                     <li class="nav-item">\
                         <a class="nav-link active" id="'+this.id+'_tab_configuration" data-toggle="pill" href="#'+this.id+'_tab_configuration_content" role="tab" aria-controls="'+this.id+'_tab_configuration_content" aria-selected="true">'+this.module_id+'</a>\
                     </li>\
+                    <li class="nav-item d-none">\
+                        <a class="nav-link" id="'+this.id+'_tab_notification_suppress" data-toggle="pill" href="#'+this.id+'_tab_notification_suppress_content"  role="tab" aria-controls="'+this.id+'_tab_notification_suppress_content" aria-selected="false">Notification Settings</a>\
+                    </li>\
                     <li class="nav-item">\
                         <a class="nav-link" id="'+this.id+'_tab_schema" data-toggle="pill" href="#'+this.id+'_tab_schema_content"  role="tab" aria-controls="'+this.id+'_tab_schema_content" aria-selected="false">Configuration Schema</a>\
                     </li>\
@@ -42,9 +45,29 @@ class Module_wizard extends Widget {
                             <input type="text" id="'+this.id+'_schema" class="form-control" placeholder="the version of the configuration schema" required>\
                         </div>\
                     </div>\
+                    <div class="tab-pane fade" id="'+this.id+'_tab_notification_suppress_content" role="tabpanel" aria-labelledby="'+this.id+'_tab_notification_suppress">\
+                        <div class="form-group">\
+                            <label>Ignore notifications if below this severity</label>\
+                            <input type="text" id="'+this.id+'_notification_suppress_severity_below" class="form-control" placeholder="alert">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Mute notifications in the following timeframe (e.g. during the night)</label>\
+                            <input type="text" id="'+this.id+'_notification_suppress_timeframe" class="form-control" placeholder="22-07">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Even if in a muted timeframe, still accept notifications above this severity</label>\
+                            <input type="text" id="'+this.id+'_notification_suppress_timeframe_severity_exception" class="form-control" placeholder="alert">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Maximum number of notifications from this module to receive each hour</label>\
+                            <input type="text" id="'+this.id+'_notification_suppress_rate_hour" class="form-control" placeholder="10">\
+                        </div>\
+                    </div>\
                 </div>\
             </form>\
         ')
+        // if a notification module, show up common notification settings
+        if (this.module_id.startsWith("notification/")) $('#'+this.id+'_tab_notification_suppress').parent('li').removeClass("d-none")
         // add link to advanced configuration
         var link = this.module_id == null ? "__new__" : this.module_id
         $("#wizard_body").append('<br><a id="'+this.id+'_advanced_editor" class="float-right text-primary">Advanced Editor</a>')
@@ -65,9 +88,24 @@ class Module_wizard extends Widget {
                 // build up the configuration file
                 var configuration = {}
                 $("#"+this_class.id+"_form :input").each(function(e){
-                    var item = this.id.replace(this_class.id+"_module_", "")
-                    var value = this.value
-                    if (value != null && value != "") configuration[item] = $.isNumeric(value) ? parseFloat(value) : value
+                    var tag = this.id
+                    var id = this.id.replace(this_class.id+"_", "")
+                    if (id.startsWith("module_")) {
+                        id = id.replace("module_", "")
+                        if ($("#"+tag).is(':checkbox')) {
+                            configuration[id] = $("#"+tag).prop("checked")
+                        }
+                        else {
+                            var value = $("#"+tag).val()
+                            if (value != null && value != "") configuration[id] = $.isNumeric(value) ? parseFloat(value) : value
+                        }
+                    }
+                    if (this_class.module_id.startsWith("notification/") && id.startsWith("notification_suppress")) {
+                        id = id.replace("notification_suppress_", "")
+                        if (! ("suppress" in configuration)) configuration["suppress"] = {}
+                        var value = $("#"+tag).val()
+                        if (value != null && value != "") configuration["suppress"][id] = $.isNumeric(value) ? parseFloat(value) : value
+                    }
                 });
                 // save new/updated configuration
                 var message = new Message(gui)
@@ -148,7 +186,7 @@ class Module_wizard extends Widget {
                             input = '\
                                 <div class="form-group">\
                                     <label>'+configuration["description"]+required_flag+'</label>\
-                                    <input type="checkbox" class="form-check-input" id="'+this.id+'_module_'+configuration["name"]+'">\
+                                    <input type="checkbox" class="form-control" id="'+this.id+'_module_'+configuration["name"]+'">\
                                 </div>'
                         }
                         // draw a select input
@@ -163,6 +201,13 @@ class Module_wizard extends Widget {
                         }
                         $('#'+this.id+'_tab_configuration_content').append(input)
                     }
+                    // add disabled checkbox
+                    input = '\
+                        <div class="form-group">\
+                            <label>Disable the module</label>\
+                            <input type="checkbox" class="form-control" id="'+this.id+'_module_disabled">\
+                        </div>'
+                    $('#'+this.id+'_tab_configuration_content').append(input)
                     // request the module's configuration
                     this.add_configuration_listener(this.module_id, "+")
                     this.waiting_configuration = true
@@ -189,6 +234,7 @@ class Module_wizard extends Widget {
             var data = message.get_data()
             // populate the form
             for (var configuration in data) {
+                if (configuration == "suppress") continue
                 var value = data[configuration]
                 // populate checkbox
                 if ($("#"+this.id+"_module_"+configuration).is(':checkbox')) {
@@ -197,6 +243,13 @@ class Module_wizard extends Widget {
                 // populate other inputs
                 else {
                     $("#"+this.id+"_module_"+configuration).val(value)
+                }
+            }
+            // populate notification settings
+            if (this.module_id.startsWith("notification/") && "suppress" in data) {
+                for (var configuration in data["suppress"]) {
+                    var value = data["suppress"][configuration]
+                    $("#"+this.id+"_notification_suppress_"+configuration).val(value)
                 }
             }
             this.waiting_configuration = false
