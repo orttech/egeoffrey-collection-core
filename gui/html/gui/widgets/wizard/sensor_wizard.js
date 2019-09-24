@@ -198,6 +198,7 @@ class Sensor_wizard extends Widget {
                 for (var module_object of manifest["modules"]) {
                     for (var module in module_object) {
                         for (var mode in module_object[module]["service_configuration"]) {
+                            if (module != "service/"+service) continue
                             var text = ""
                             if (mode == "pull") text = "Pull - periodically poll the sensor for new data"
                             else if (mode == "push") text = "Push - the sensor will periodically provide new data"
@@ -234,6 +235,8 @@ class Sensor_wizard extends Widget {
                 // build the service configuration form based on the selected mode
                 for (var module_object of manifest["modules"]) {
                     for (var module in module_object) {
+                        var service = $('#'+this_class.id+'_service_name').val()
+                        if (module != "service/"+service) continue
                         for (var mode in module_object[module]["service_configuration"]) {
                             if (mode != selected_mode) continue
                             // retrieve the service configuration schema

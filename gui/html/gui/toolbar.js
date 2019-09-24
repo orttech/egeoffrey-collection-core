@@ -107,6 +107,8 @@ class Toolbar extends Widget {
             // increase the counter
             var counter = parseInt($(widget_counter).html())+1
             $(widget_counter).html(counter)
+            // unhide the counter if hidden
+            if ($(widget_counter).hasClass("d-none")) $(widget_counter).removeClass("d-none")
             // add the alert to the list
             this.add_item(widget, alert_text)
             // remove the oldest one
@@ -128,6 +130,8 @@ class Toolbar extends Widget {
             var count = data[0]
             // set the counter
             $(widget_counter).html(data[0])
+            // hide the counter if there are no items
+            if (data[0] == 0) $(widget_counter).addClass("d-none")
             // retrieve the most recent items from the database
             var alerts_to_retrieve = count >= 10 ? 10 : count
             var message = new Message(gui)

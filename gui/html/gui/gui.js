@@ -76,6 +76,8 @@ class Gui extends Module {
             "hideDuration": "500",
             "timeOut": "4000",
         }
+        if (type == "danger") type = "error"
+        if (type != "warning" && type != "success" && type != "info" && type != "error") type = "info"
         toastr[type](message)
 	}
     
