@@ -419,6 +419,6 @@ modules:
         placeholder: 70.11
         required: true
 package: egeoffrey-collection-core
-revision: 24
+revision: 25
 tags: collection core
 version: 1.0
