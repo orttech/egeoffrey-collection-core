@@ -32,7 +32,7 @@
       size: 3
       title: Input String
       widget: input
-- Timeseries widgets:
+- Timeseries widgets (requires egeoffrey-service-command):
   - icon: chart-line
     sensors:
     - examples/widgets/value
@@ -67,7 +67,7 @@
     size: 4
     title: Tasks List
     widget: tasks
-- Image widgets:
+- Image widgets (requires egeoffrey-service-image):
   - sensor: examples/widgets/image
     size: 6
     title: Image

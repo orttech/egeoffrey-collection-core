@@ -1,13 +1,44 @@
-- Command:
+- Timeseries with random values:
+  - icon: chart-line
+    sensors:
+    - examples/command/random
+    size: 3
+    title: Summary Widget
+    widget: summary
+  - sensors:
+    - examples/command/random
+    size: 4
+    title: 'Timeline: Latest values'
+    widget: timeline
+  - group_by: hour
+    sensors:
+    - examples/command/random
+    size: 5
+    title: 'Timeline: aggregate by hour'
+    widget: timeline
+- ? ''
+  : - group_by: day
+      sensor: examples/command/random
+      size: 4
+      title: Daily Ranges
+      widget: range
+    - group_by: day
+      sensors:
+      - examples/command/random
+      size: 8
+      title: 'Timeline: aggregate by day'
+      widget: timeline
+- Sensor Mode Pull:
   - icon: play
-    sensor: examples/command/command_in
-    size: 3
-    title: Command In
+    sensor: examples/command/pull
+    size: 4
+    title: Pulled Date
     widget: value
+- Sensor Mode Actuator:
   - actions:
-    - SET examples/command/command_out 1
+    - SET examples/command/actuator 1
     icon: play
-    size: 3
-    text: Run Command
-    title: Command Out
+    size: 4
+    text: Run
+    title: "Run date > /tmp/command_out"
     widget: button

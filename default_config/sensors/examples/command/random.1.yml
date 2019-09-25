@@ -1,13 +1,13 @@
 calculate: avg_min_max
-description: Command In
-format: string
-icon: play
+description: Random number
+format: float_2
+icon: hashtag
 retain: history
 service:
   configuration:
-    command: cat /tmp/command_out
+    command: echo $RANDOM
   mode: pull
   name: command
   schedule:
-    minutes: 10
+    minutes: 5
     trigger: interval

@@ -1,0 +1,10 @@
+format: string
+retain: last_two_values
+service:
+  configuration:
+    request: alerts
+  mode: pull
+  name: weatherchannel
+  schedule:
+    minutes: 60
+    trigger: interval

@@ -1,14 +1,13 @@
-disabled: true
 description: earthquake
 format: position
-icon: microchip
+icon: globe
 retain: short_history
 service:
   configuration:
     domain: earthquake.usgs.gov
-    query: minmag=7
+    query: minmag=5
   mode: pull
   name: earthquake
   schedule:
-    minutes: 10
+    minutes: 60
     trigger: interval

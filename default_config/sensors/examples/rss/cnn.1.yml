@@ -1,5 +1,5 @@
-disabled: true
 description: rss
+icon: newspaper
 format: string
 retain: single_value
 service:

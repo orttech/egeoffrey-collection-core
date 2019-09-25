@@ -1,0 +1,5 @@
+- CNN RSS Feed:
+  - sensor: examples/rss/cnn
+    size: 12
+    title: CNN Headlines
+    widget: table

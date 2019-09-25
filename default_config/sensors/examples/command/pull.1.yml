@@ -1,0 +1,12 @@
+description: Date
+format: string
+icon: play
+retain: single_value
+service:
+  configuration:
+    command: date
+  mode: pull
+  name: command
+  schedule:
+    minutes: 10
+    trigger: interval

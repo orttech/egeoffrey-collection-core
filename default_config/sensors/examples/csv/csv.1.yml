@@ -1,5 +1,4 @@
-disabled: true
-description: csv
+description: NOAA csv
 format: float_2
 icon: microchip
 retain: history

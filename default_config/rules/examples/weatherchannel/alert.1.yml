@@ -1,0 +1,14 @@
+conditions:
+- - alert_latest != alert_empty
+  - alert_latest != alert_previous
+constants:
+  alert_empty: ''
+schedule:
+  hours: 1
+  trigger: interval
+severity: warning
+text: '%alert_latest%'
+type: recurrent
+variables:
+  alert_latest: examples/weatherchannel/alerts
+  alert_previous: -2,-2 examples/weatherchannel/alerts

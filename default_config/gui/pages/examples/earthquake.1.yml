@@ -1,6 +1,6 @@
 - Earthquake:
   - sensors:
-    - examples/earthquake/earthquake
+    - examples/earthquake/usgs
     size: 6
     title: Earthquake
     widget: map
