@@ -193,7 +193,7 @@ class Configuration extends Widget {
             var codemirror_options = {
                     lineNumbers: true,
                     mode: "yaml",
-                    indentWithTabs: true,
+                    indentWithTabs: false,
                     tabSize: 2,
             }
             var codemirror = CodeMirror.fromTextArea(document.getElementById(tab_id+'_text'), codemirror_options);
@@ -224,6 +224,7 @@ class Configuration extends Widget {
                         gui.notify("error","Invalid configuration file: "+e.message)
                         return
                     }
+                    return
                     message.set_data(yaml)
                     gui.send(message)
                     gui.notify("success","Configuration "+message.args+" saved successfully. Please manually restart any impacted module")

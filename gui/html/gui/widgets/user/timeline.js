@@ -32,7 +32,8 @@ class Timeline extends Widget {
                 gui.sessions.register(message, {
                     "sensor_id": sensor_id,
                     "style": "arearange",
-                    "label": "range"
+                    "label": "range",
+                    "group_by": "group_by" in this.widget ? this.widget["group_by"] : null
                 })
                 this.send(message)
             }
@@ -52,7 +53,8 @@ class Timeline extends Widget {
                 "sensor_id": sensor_id,
                 "style": style,
                 "label": series,
-                "first_series_id": first_series_id
+                "first_series_id": first_series_id,
+                "group_by": "group_by" in this.widget ? this.widget["group_by"] : null
             })
             this.send(message)
 		}
@@ -126,6 +128,7 @@ class Timeline extends Widget {
             series["type"] = session["style"]
             series["id"] = message.args
             series["data"] = data
+            if (session["group_by"] != null) series["gapSize"] = 1
             if (!("tooltip" in series)) series["tooltip"] = {};
             if (!("dataLabels" in series)) series["dataLabels"] = {};
             series["tooltip"]["valueSuffix"] = "unit" in sensor ? sensor["unit"] : ""

@@ -109,7 +109,7 @@ class Modules extends Widget {
         }
         // received a ping response
         else if (message.command == "PONG") {
-            var latency = ((new Date()).getTime()-this.ping[message.sender])/1000
+            var latency = (((new Date()).getTime()-this.ping[message.sender])/1000).toFixed(1)
             var table = $("#"+this.id+"_table").DataTable()        
             table.rows().every( function ( row_index, table_loop, row_loop ) {
                 var row = this.data()
