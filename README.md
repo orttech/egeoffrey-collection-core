@@ -45,6 +45,7 @@ To configure each module included in this package, once started, click on the *'
     - *calculate**: aggregation policies that can be associated to sensors to e.g. automatically calculate average, minimum and maximum per hour/day
     - *retain**: retention policies that can be associated to sensors to e.g. automatically purge old values from the database
     - *post_processors**: set of available post processing commands that can be associated to sensors to e.g. automatically post-process a new value once collected
+    - *duplicates_tolerance*: if requested to save the same sensor's value of the latest in a very short time, ignore it (tolerance in seconds)
 - **gui/webserver**: runs the webserver serving eGeoffrey's web interface
 - **interaction/slack**: connect to a slack channel as a bot and interact with the user
   - Module configuration:
@@ -189,4 +190,4 @@ collection core
 
 ## Version
 
-The version of this egeoffrey-collection-core is 1.0-26 on the master branch.
+The version of this egeoffrey-collection-core is 1.0-27 on the master branch.

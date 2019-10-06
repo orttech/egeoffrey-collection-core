@@ -363,7 +363,7 @@ class Sensor_wizard extends Widget {
             window.history.back()
         })
         // ask for controller/hub configuration
-        this.add_configuration_listener("controller/hub", 1)
+        this.add_configuration_listener("controller/hub", 2)
         // request manifests for all the services
         this.add_broadcast_listener("+/+", "MANIFEST", "#")
         // extract requested sensor from URL

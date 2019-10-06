@@ -150,20 +150,22 @@ class Rules extends Widget {
         else if (severity == "none") severity = '<i class="fas fa-sticky-note text-gray"></i>'
         else if (severity == "debug") severity = '<i class="fas fa-bug text-gray"></i>'
         var conditions = ""
-        for (var i = 0; i < rule["conditions"].length; i++) {
-            var or_condition = rule["conditions"][i]
-            for (var and_condition of or_condition) {
-                conditions = conditions+and_condition+"<br>"
+        if ("conditions" in rule) {
+            for (var i = 0; i < rule["conditions"].length; i++) {
+                var or_condition = rule["conditions"][i]
+                for (var and_condition of or_condition) {
+                    conditions = conditions+and_condition+"<br>"
+                }
+                if (i != rule["conditions"].length-1) conditions = conditions+"OR<br>"
             }
-            if (i != rule["conditions"].length-1) conditions = conditions+"OR<br>"
         }
         var actions = ""
         if ("actions" in rule) {
             for (var action of rule["actions"]) actions = actions+action+"<br>"
         }
-        var for_i = ""
-        if ("for" in rule) {
-            for (var i of rule["for"]) for_i = for_i+i+"<br>"
+        var macros = ""
+        if ("macros" in rule) {
+            for (var i of rule["macros"]) macros = macros+i+"<br>"
         }
         var run_html = '<button type="button" id="'+this.id+'_run_'+rule_tag+'" class="btn btn-default"><i class="fas fa-play"></i></button>'
         var edit_html = '<button type="button" id="'+this.id+'_edit_'+rule_tag+'" class="btn btn-default"><i class="fas fa-edit"></i></button>'
@@ -174,7 +176,7 @@ class Rules extends Widget {
             description, 
             severity,
             rule["type"], 
-            this.disabled_item(for_i, disabled), 
+            this.disabled_item(macros, disabled), 
             this.disabled_item(conditions, disabled), 
             format_multiline(this.disabled_item(actions, disabled), 30), 
             disabled,

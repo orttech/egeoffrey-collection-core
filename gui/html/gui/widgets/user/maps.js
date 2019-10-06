@@ -103,9 +103,9 @@ class Maps extends Widget {
             var waypoints = []
             // for each data point
             for (var i = 0; i < data.length; i++) {
-                if (data[i][1] == null) continue
+                if (data[i] == null) continue
                 // normalize and parse position
-                var position = JSON.parse(data[i][1])
+                var position = JSON.parse(data[i])
                 // add a marker
                 var options = {
                     lat: position["latitude"],
@@ -146,8 +146,8 @@ class Maps extends Widget {
                     // build the route
                     if (waypoints.length < 2) return;
                     // set origin and destination
-                    var first = JSON.parse(data[0][1])
-                    var last = JSON.parse(data[(data.length-1)][1])
+                    var first = JSON.parse(data[0])
+                    var last = JSON.parse(data[(data.length-1)])
                     // draw the route
                     thismap.drawRoute({
                         origin: [first["latitude"],first["longitude"]],

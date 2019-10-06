@@ -36,7 +36,7 @@ class Gui extends Module {
         // unmanaged configuration schema
         this.supported_sensors_config_schema = 1
         this.supported_house_config_schema = 1
-        this.supported_rules_config_schema = 1
+        this.supported_rules_config_schema = 2
         this.supported_manifest_schema = 2
         // subscribe to required settings
         this.add_configuration_listener("house", 1, true)

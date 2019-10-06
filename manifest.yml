@@ -94,6 +94,11 @@ modules:
       format: dict
       name: post_processors
       required: true
+    - description: if requested to save the same sensor's value of the latest in a
+        very short time, ignore it (tolerance in seconds)
+      format: int
+      name: duplicates_tolerance
+      required: false
 - gui/webserver:
     description: Runs the webserver serving eGeoffrey's web interface
 - interaction/slack:
@@ -419,6 +424,6 @@ modules:
         placeholder: 70.11
         required: true
 package: egeoffrey-collection-core
-revision: 26
+revision: 27
 tags: collection core
 version: 1.0

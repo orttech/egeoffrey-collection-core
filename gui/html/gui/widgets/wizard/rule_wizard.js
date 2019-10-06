@@ -4,7 +4,8 @@ class Rule_wizard extends Widget {
         super(id, widget)
         this.constants_count = 0
         this.variables_count = 0
-        this.for_i_count = 0
+        this.macro_count = 0
+        this.trigger_count = 0
         this.conditions_block_count = 0
         this.conditions_count = []
         this.actions_count = 0
@@ -32,7 +33,10 @@ class Rule_wizard extends Widget {
                         <a class="nav-link active" id="'+this.id+'_tab_general" data-toggle="pill" href="#'+this.id+'_tab_general_content" role="tab" aria-controls="'+this.id+'_tab_general_content" aria-selected="true">General</a>\
                     </li>\
                     <li class="nav-item">\
-                        <a class="nav-link" id="'+this.id+'_tab_for_i" data-toggle="pill" href="#'+this.id+'_tab_for_i_content"  role="tab" aria-controls="'+this.id+'_tab_for_i_content" aria-selected="false">Macro</a>\
+                        <a class="nav-link" id="'+this.id+'_tab_macro" data-toggle="pill" href="#'+this.id+'_tab_macro_content"  role="tab" aria-controls="'+this.id+'_tab_macro_content" aria-selected="false">Macro</a>\
+                    </li>\
+                    <li class="nav-item d-none">\
+                        <a class="nav-link" id="'+this.id+'_tab_triggers" data-toggle="pill" href="#'+this.id+'_tab_triggers_content"  role="tab" aria-controls="'+this.id+'_tab_triggers_content" aria-selected="false">Triggers</a>\
                     </li>\
                     <li class="nav-item">\
                         <a class="nav-link" id="'+this.id+'_tab_constants" data-toggle="pill" href="#'+this.id+'_tab_constants_content"  role="tab" aria-controls="'+this.id+'_tab_constants_content" aria-selected="false">Constants</a>\
@@ -78,13 +82,13 @@ class Rule_wizard extends Widget {
                             <select id="'+this.id+'_type" class="form-control" required>\
                                 <option value="recurrent">Recurrent - schedule rule\'s execution through the Schedule tab</option>\
                                 <option value="on_demand">On-Demand - runs manually or when requested by the chatbot</option>\
-                                <option value="realtime">Realtime - runs whenever a sensor referenced by a variable is updated</option>\
+                                <option value="realtime">Realtime - runs whenever one of the sensors listed in the Triggers tab is updated</option>\
                             </select>\
                         </div>\
                     </div>\
-                    <div class="tab-pane fade" id="'+this.id+'_tab_for_i_content" role="tabpanel" aria-labelledby="'+this.id+'_tab_for_i">\
-                        <div class="text-right"><a onClick=\'$("#'+this.id+'_help_for_i\").toggleClass(\"d-none\")\'><i class="fas fa-question-circle text-info fa-1x"></i></a></div>\
-                        <div id="'+this.id+'_help_for_i" class="callout callout-info d-none">\
+                    <div class="tab-pane fade" id="'+this.id+'_tab_macro_content" role="tabpanel" aria-labelledby="'+this.id+'_tab_macro">\
+                        <div class="text-right"><a onClick=\'$("#'+this.id+'_help_macro\").toggleClass(\"d-none\")\'><i class="fas fa-question-circle text-info fa-1x"></i></a></div>\
+                        <div id="'+this.id+'_help_macro" class="callout callout-info d-none">\
                             <p>If you want the same rule to be executed for multiple entities (e.g. different sensors), reference its sensor_id below. Then you can use the %i% placeholder in variables and actions that will be replaced with the sensor\'s value and the rule will be run in parallel for each instance</p>\
                             <p>Examples:</p>\
                             <ul>\
@@ -93,10 +97,21 @@ class Rule_wizard extends Widget {
                                 </li>\
                             </ul>\
                         </div>\
-                        <div id="'+this.id+'_for_i"></div>\
+                        <div id="'+this.id+'_macro"></div>\
                         <br>\
                         <div class="form-group">\
-                            <button type="button" class="btn btn-default float-right" id="'+this.id+'_add_for_i"><i class="fas fa-plus"></i> Add Placeholder</button>\
+                            <button type="button" class="btn btn-default float-right" id="'+this.id+'_add_macro"><i class="fas fa-plus"></i> Add Placeholder</button>\
+                        </div>\
+                    </div>\
+                    <div class="tab-pane fade" id="'+this.id+'_tab_triggers_content" role="tabpanel" aria-labelledby="'+this.id+'_tab_triggers">\
+                        <div class="text-right"><a onClick=\'$("#'+this.id+'_help_triggers\").toggleClass(\"d-none\")\'><i class="fas fa-question-circle text-info fa-1x"></i></a></div>\
+                        <div id="'+this.id+'_help_triggers" class="callout callout-info d-none">\
+                            <p>For rules of type realtime, you have to set one or more sensor_id(s) which are monitored and which will trigger the rule\'s execution (hence conditions will be evaluated) whenever a new value is saved.\
+                        </div>\
+                        <div id="'+this.id+'_triggers"></div>\
+                        <br>\
+                        <div class="form-group">\
+                            <button type="button" class="btn btn-default float-right" id="'+this.id+'_add_trigger"><i class="fas fa-plus"></i> Add Trigger</button>\
                         </div>\
                     </div>\
                     <div class="tab-pane fade" id="'+this.id+'_tab_constants_content" role="tabpanel" aria-labelledby="'+this.id+'_tab_constants">\
@@ -248,9 +263,14 @@ class Rule_wizard extends Widget {
             };
         }(this));
         // configure add buttons
-        $("#"+this.id+"_add_for_i").unbind().click(function(this_class) {
+        $("#"+this.id+"_add_macro").unbind().click(function(this_class) {
             return function () {
-                this_class.add_for_i()
+                this_class.add_macro()
+            };
+        }(this));
+        $("#"+this.id+"_add_trigger").unbind().click(function(this_class) {
+            return function () {
+                this_class.add_trigger()
             };
         }(this));
         $("#"+this.id+"_add_constant").unbind().click(function(this_class) {
@@ -282,6 +302,11 @@ class Rule_wizard extends Widget {
                     $('#'+this_class.id+'_tab_schedule').parent('li').removeClass("d-none")
                 } else {
                     $('#'+this_class.id+'_tab_schedule').parent('li').addClass("d-none")
+                }
+                if (type == "realtime") {
+                    $('#'+this_class.id+'_tab_triggers').parent('li').removeClass("d-none")
+                } else {
+                    $('#'+this_class.id+'_tab_triggers').parent('li').addClass("d-none")
                 }
                 // trigger change on schedule trigger
                 $('#'+this_class.id+'_schedule_trigger').trigger("change")
@@ -333,11 +358,18 @@ class Rule_wizard extends Widget {
                         if (value != null && value != "") rule["schedule"][item] = $.isNumeric(value) ? parseFloat(value) : value
                     });
                 }
-                // for_i
-                $("#"+this_class.id+"_for_i :input[type=text]").each(function(e){
-                    if (! ("for" in rule)) rule["for"] = []
-                    rule["for"].push(this.value)
+                // macro
+                $("#"+this_class.id+"_macro :input[type=text]").each(function(e){
+                    if (! ("macros" in rule)) rule["macros"] = []
+                    rule["macros"].push(this.value)
                 });
+                // triggers
+                if (rule["type"] == "realtime") {
+                    $("#"+this_class.id+"_triggers :input[type=text]").each(function(e){
+                        if (! ("triggers" in rule)) rule["triggers"] = []
+                        rule["triggers"].push(this.value)
+                    });
+                }
                 // constants
                 var key = null
                 $("#"+this_class.id+"_constants :input[type=text]").each(function(e){
@@ -417,29 +449,55 @@ class Rule_wizard extends Widget {
     on_message(message) {
     }
     
-    // add a for_i to the form
-    add_for_i(key="") {
-        var i = this.for_i_count
+    // add a macro to the form
+    add_macro(key="") {
+        var i = this.macro_count
         var html = '\
-            <div class="row" id="'+this.id+'_for_i_row_'+i+'">\
+            <div class="row" id="'+this.id+'_macro_row_'+i+'">\
                 <div class="col-11">\
-                    <input type="text" id="'+this.id+'_for_i_key_'+i+'" class="form-control" placeholder="sensor placeholder" value="'+key+'" required>\
+                    <input type="text" id="'+this.id+'_macro_key_'+i+'" class="form-control" placeholder="sensor placeholder" value="'+key+'" required>\
                 </div>\
                 <div class="col-1">\
                     <button type="button" id="'+this.id+'_text" class="btn btn-default">\
-                        <i class="fas fa-times text-red" id="'+this.id+'_for_i_remove_'+i+'"></i>\
+                        <i class="fas fa-times text-red" id="'+this.id+'_macro_remove_'+i+'"></i>\
                     </button>\
                 </div>\
             </div>\
         '
-        $("#"+this.id+"_for_i").append(html)
+        $("#"+this.id+"_macro").append(html)
         // configure remove button
-        $("#"+this.id+"_for_i_remove_"+i).unbind().click(function(this_class) {
+        $("#"+this.id+"_macro_remove_"+i).unbind().click(function(this_class) {
             return function () {
-                $("#"+this_class.id+"_for_i_row_"+i).remove()
+                $("#"+this_class.id+"_macro_row_"+i).remove()
             };
         }(this));
-        this.for_i_count++
+        this.macro_count++
+        return i
+    }
+    
+    // add a trigger to the form
+    add_trigger(key="") {
+        var i = this.trigger_count
+        var html = '\
+            <div class="row" id="'+this.id+'_trigger_row_'+i+'">\
+                <div class="col-11">\
+                    <input type="text" id="'+this.id+'_trigger_key_'+i+'" class="form-control" placeholder="e.g. sensor_id" value="'+key+'" required>\
+                </div>\
+                <div class="col-1">\
+                    <button type="button" id="'+this.id+'_text" class="btn btn-default">\
+                        <i class="fas fa-times text-red" id="'+this.id+'_trigger_remove_'+i+'"></i>\
+                    </button>\
+                </div>\
+            </div>\
+        '
+        $("#"+this.id+"_triggers").append(html)
+        // configure remove button
+        $("#"+this.id+"_trigger_remove_"+i).unbind().click(function(this_class) {
+            return function () {
+                $("#"+this_class.id+"_trigger_row_"+i).remove()
+            };
+        }(this));
+        this.trigger_count++
         return i
     }
     
@@ -612,9 +670,15 @@ class Rule_wizard extends Widget {
         // populate disabled checkbox
         if ("disabled" in rule && rule["disabled"]) $("#"+this.id+"_disabled").prop("checked", true)
         // populate for
-        if ("for" in rule) {
-            for (var for_i of rule["for"]) {
-                this.add_for_i(for_i)
+        if ("macros" in rule) {
+            for (var macro of rule["macros"]) {
+                this.add_macro(macro)
+            }
+        }
+        // populate triggers
+        if ("triggers" in rule) {
+            for (var trigger of rule["triggers"]) {
+                this.add_trigger(trigger)
             }
         }
         // populate constants
