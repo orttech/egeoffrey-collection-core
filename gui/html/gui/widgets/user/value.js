@@ -23,7 +23,7 @@ class Value extends Widget {
         gui.sessions.register(message, {
             "component": "value",
             "sensor_id": sensor_id,
-            "widget": this.widget["widget"]
+            "widget": this.widget
         })
         this.send(message)
         var timestamp_sensor = sensor_id
@@ -79,6 +79,7 @@ class Value extends Widget {
                 return function () {
                     // trigger actions
                     for (var action of actions) {
+                        gui.notify("info", "Requesting to execute "+action)
                         var action_split = action.split(" ")
                         var command = action_split[0]
                         // set the sensor to a value or poll it
@@ -141,13 +142,36 @@ class Value extends Widget {
             // add value
             if (session["component"] == "value") {
                 var tag = "#"+this.id+"_value"
-                if (session["widget"] == "value") {
+                if (session["widget"]["widget"] == "value") {
                     // add value and suffix
-                    $(tag).html(data.length == 1 ? data[0] : "N/A");
-                    if ("unit" in sensor) $(tag+"_suffix").html(sensor["unit"]);
+					if (data.length == 1) {
+						var value = data[0]
+						var text_color = "black"
+						for (var color of ["success", "warning", "danger"]) {
+							if ("color_"+color in session["widget"]) {
+								var min, max
+								if (session["widget"]["color_"+color].includes("-")) {
+									var split = session["widget"]["color_"+color].split("-")
+									min = split[0]
+									max = split[1]
+								}
+								else {
+									min = max = session["widget"]["color_"+color]
+								}
+								if (jQuery.isNumeric(min) && jQuery.isNumeric(max) && jQuery.isNumeric(value)) {
+									if (value > min && value <= max) text_color = color
+								} else {
+									if (value == min) text_color = color
+								}
+							}
+						}
+						$(tag).html('<span class="text-'+text_color+'">'+value+'</span>');
+						if ("unit" in sensor) $(tag+"_suffix").html('<span class="text-'+text_color+'">'+sensor["unit"]+'</span>');
+					}
+					else $(tag).html(data.length == 1 ? data[0] : "N/A");
                 }
                 // this is a status box, set the status
-                else if (session["widget"] == "status") {
+                else if (session["widget"]["widget"] == "status") {
                     tag = tag.replace("_value","")
                     if (data.length == 1) {
                         var target = "info-box-icon"
@@ -172,7 +196,7 @@ class Value extends Widget {
                     }
                 }
                 // this is a control box, configure the checkbox
-                else if (session["widget"] == "control") {
+                else if (session["widget"]["widget"] == "control") {
                     var id = tag.replace("#","")
                     var html = '\
                     <center>\
@@ -229,7 +253,7 @@ class Value extends Widget {
                     }(tag+"_toggle", session["sensor_id"], actions));
                 }
                 // this is an input box, populate the input
-                else if (session["widget"] == "input") {
+                else if (session["widget"]["widget"] == "input") {
                     var id = tag.replace("#","")
                     $(tag.replace("_value","_timestamp")).addClass("d-none")
                     var html = '\

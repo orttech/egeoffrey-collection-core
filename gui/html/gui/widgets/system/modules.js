@@ -114,7 +114,8 @@ class Modules extends Widget {
             table.rows().every( function ( row_index, table_loop, row_loop ) {
                 var row = this.data()
                 if (row[8] != message.sender) return
-                table.cell(row_index, 6).data(latency+"s").draw(false)
+				var text = latency < 2 ? latency+"s" : '<span class="text-danger">'+latency+"s</span>" 
+                table.cell(row_index, 6).data(text).draw(false)
             });
         }
         // received a discover response
@@ -174,8 +175,6 @@ class Modules extends Widget {
                 var row = table.row.add(table_options).draw();
                 table.responsive.recalc()
                 if (table.data().count() == 0) $("#"+this.id+"_table_text").html('No data to display')
-                // set the debug checkbox
-                $("#"+this.id+"_debug_"+module_id).prop('checked', module["debug"])
                 // set configured checkbox
                 if (module["configured"]) {
                     row.data()[5] = '<i class="fas fa-check text-success"></i>'
@@ -187,6 +186,9 @@ class Modules extends Widget {
                   radioClass: 'iradio_square-blue',
                   increaseArea: '20%' 
                 });
+                // set the debug checkbox
+                $("#"+this.id+"_debug_"+module_id).prop('checked', module["debug"])
+				$("#"+this.id+"_debug_"+module_id).iCheck('update')
                 // when the debug checkbox changes, send a message to the module's watchdog
                 $("#"+this.id+"_debug_"+module_id).unbind().on('ifChanged',function(module, watchdog) {
                     return function () {

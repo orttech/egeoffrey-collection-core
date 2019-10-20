@@ -49,6 +49,7 @@ class Gui extends Module {
         this.page_listener = null
         this.menu = new Menu("menu")
         this.toolbar = new Toolbar("toolbar")
+		this.first_page_loaded = false
         // set to true when waiting for a page
         this.waiting_for_page = false
         // loaded Google Maps
@@ -124,7 +125,7 @@ class Gui extends Module {
     // load the page requested in window.hash
     load_page() {
         this.unload_page()
-        // load the page
+        // move to the top of the page
         window.scrollTo(0,0)
         var page_id = location.hash.replace('#','')
         // remove arguments from the page_id
@@ -137,6 +138,12 @@ class Gui extends Module {
             window.location.hash = '#'+gui.settings["default_page"]
             return
         }
+		// if loading the page for the first time, draw the menu and toolbar (otherwise unload_page() would reset pending requests)
+		if (! this.first_page_loaded) {
+			this.menu.draw()
+			this.toolbar.draw()
+			this.first_page_loaded = true
+		}
         // load system pages
         if (page_id.startsWith("__")) {
             this.page = new Page("SYSTEM", page_id, "")
@@ -241,9 +248,6 @@ class Gui extends Module {
         window.onhashchange = function() {
             gui.load_page()
         }
-        // draw menu and top toolbar
-        this.menu.draw()
-        this.toolbar.draw()
         // animate the logo icon
         this.animate_logo()
     }
@@ -286,7 +290,7 @@ class Gui extends Module {
         }
         // keep track of received manifest files
         if (message.command == "MANIFEST") this.manifests[message.args] = message
-        if (delivered == 0) this.log_debug("undelivered message: "+message.dump())
+        if (delivered == 0) this.log_warning("undelivered message: "+message.dump())
     }
     
     // What to do when receiving a new/updated configuration for this module

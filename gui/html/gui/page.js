@@ -691,6 +691,18 @@ class Page {
                             <label>Show All Link</label>\
                             <input type="text" id="'+id+'_value_link" class="form-control" placeholder="link for the \'Show All\' link. Applicable for style 2 widgets only">\
                         </div>\
+                        <div class="form-group">\
+                            <label>Value in green if between this range</label>\
+                            <input type="text" id="'+id+'_value_color_success" class="form-control" placeholder="The range (e.g. 0-60) or the value for applying the color">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Value in yellow if between this range</label>\
+                            <input type="text" id="'+id+'_value_color_warning" class="form-control" placeholder="The range (e.g. 61-80) or the value for applying the color">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Value in red if between this range</label>\
+                            <input type="text" id="'+id+'_value_color_danger" class="form-control" placeholder="The range (e.g. 81-100) or the value for applying the color">\
+                        </div>\
                     </div>\
                     \
                     <div class="tab-pane fade" id="'+id+'_tab_status_content" role="tabpanel" aria-labelledby="'+id+'_tab_status">\
@@ -847,6 +859,10 @@ class Page {
                             </select>\
                         </div>\
                         <div class="form-group">\
+                            <label>Timeframe to display in days</label>\
+                            <input type="text" id="'+id+'_map_timeframe" class="form-control" placeholder="display positions for this number of past days (default 7 days)">\
+                        </div>\
+                        <div class="form-group">\
                             <label>Track movements with a line among positions</label>\
                             <input type="checkbox" class="form-control" id="'+id+'_map_tracking">\
                         </div><br>\
@@ -945,7 +961,7 @@ class Page {
         var simple_types = {}
         simple_types["general"] = ["title", "size", "widget", "offset"]
         simple_types["summary"] = ["icon", "color", "icon_sensor"]
-        simple_types["value"] = ["sensor", "icon", "color", "timestamp_sensor", "icon_sensor", "variant", "link"]
+        simple_types["value"] = ["sensor", "icon", "color", "timestamp_sensor", "icon_sensor", "variant", "link", "color_success", "color_warning", "color_danger"]
         simple_types["timeline"] = ["group_by", "timeframe", "style", "series"]
         simple_types["range"] = ["sensor", "group_by", "timeframe"]
         simple_types["status"] = ["sensor", "timestamp_sensor", "variant"]
@@ -960,7 +976,7 @@ class Page {
         simple_types["tasks"] = ["sensor"]
         simple_types["logs"] = ["show_only"]
         simple_types["notifications"] = ["show_only"]
-        simple_types["map"] = ["map_type"]
+        simple_types["map"] = ["map_type", "timeframe"]
         var array_types = {}
         array_types["summary"] = ["sensors"]
         array_types["timeline"] = ["sensors"]

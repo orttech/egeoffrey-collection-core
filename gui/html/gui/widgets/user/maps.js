@@ -11,6 +11,7 @@ class Maps extends Widget {
     
     // request the data to the database
     request_data() {
+		var timeframe = "timeframe" in this.widget ? this.widget["timeframe"] : 7
         // for each sensor
         for (var i = 0; i < this.widget["sensors"].length; i++) {
             var sensor_id = this.widget["sensors"][i]
@@ -18,8 +19,8 @@ class Maps extends Widget {
             var message = new Message(gui)
             message.recipient = "controller/db"
             message.command = "GET"
-            // request calculated average values if group_by specified
             message.args = sensor_id
+			message.set("timeframe", "last_"+timeframe+"_days")
             gui.sessions.register(message, {
                 "sensor_id": sensor_id,
             })
@@ -105,7 +106,7 @@ class Maps extends Widget {
             for (var i = 0; i < data.length; i++) {
                 if (data[i] == null) continue
                 // normalize and parse position
-                var position = JSON.parse(data[i])
+                var position = JSON.parse(data[i][1])
                 // add a marker
                 var options = {
                     lat: position["latitude"],
@@ -146,8 +147,8 @@ class Maps extends Widget {
                     // build the route
                     if (waypoints.length < 2) return;
                     // set origin and destination
-                    var first = JSON.parse(data[0])
-                    var last = JSON.parse(data[(data.length-1)])
+                    var first = JSON.parse(data[1][0])
+                    var last = JSON.parse(data[1][(data.length-1)])
                     // draw the route
                     thismap.drawRoute({
                         origin: [first["latitude"],first["longitude"]],

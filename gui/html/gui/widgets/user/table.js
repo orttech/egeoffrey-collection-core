@@ -78,7 +78,7 @@ class Table extends Widget {
             table.clear()
             for (var entry of data[0].split("\n")) {
                 if (entry == "") continue
-                table.row.add([entry]).draw(false);
+                table.row.add([escape_html(entry)]).draw(false);
             }
             if (table.data().count() == 0) $("#"+this.id+"_table_text").html('No data to display')
         }

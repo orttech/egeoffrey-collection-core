@@ -48,19 +48,19 @@ class Module_wizard extends Widget {
                     <div class="tab-pane fade" id="'+this.id+'_tab_notification_suppress_content" role="tabpanel" aria-labelledby="'+this.id+'_tab_notification_suppress">\
                         <div class="form-group">\
                             <label>Ignore notifications if below this severity</label>\
-                            <input type="text" id="'+this.id+'_notification_suppress_severity_below" class="form-control" placeholder="alert">\
+                            <input type="text" id="'+this.id+'_notification_suppress_severity_below" class="form-control" placeholder="e.g. alert">\
                         </div>\
                         <div class="form-group">\
                             <label>Mute notifications in the following timeframe (e.g. during the night)</label>\
-                            <input type="text" id="'+this.id+'_notification_suppress_timeframe" class="form-control" placeholder="22-07">\
+                            <input type="text" id="'+this.id+'_notification_suppress_timeframe" class="form-control" placeholder="e.g. 22-07">\
                         </div>\
                         <div class="form-group">\
                             <label>Even if in a muted timeframe, still accept notifications above this severity</label>\
-                            <input type="text" id="'+this.id+'_notification_suppress_timeframe_severity_exception" class="form-control" placeholder="alert">\
+                            <input type="text" id="'+this.id+'_notification_suppress_timeframe_severity_exception" class="form-control" placeholder="e.g. alert">\
                         </div>\
                         <div class="form-group">\
                             <label>Maximum number of notifications from this module to receive each hour</label>\
-                            <input type="text" id="'+this.id+'_notification_suppress_rate_hour" class="form-control" placeholder="10">\
+                            <input type="text" id="'+this.id+'_notification_suppress_rate_hour" class="form-control" placeholder="e.g. 10">\
                         </div>\
                     </div>\
                 </div>\

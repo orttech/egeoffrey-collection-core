@@ -166,7 +166,7 @@ class Logs extends Widget {
             for (var entry of data) {
                 var timestamp = entry[0]
                 var text = entry[1]
-                table.row.add([timestamp/1000, this.format_severity(message.args), text])
+                table.row.add([timestamp/1000, this.format_severity(message.args), escape_html(text)])
             }
             table.draw()
             table.responsive.recalc()

@@ -133,7 +133,7 @@ class Notifications extends Widget {
             if (session == null) return
             var data = message.get("data")
             for (var entry of data) {
-                table.row.add([entry[0]/1000, this.format_severity(message.args), entry[1]]);
+                table.row.add([entry[0]/1000, this.format_severity(message.args), escape_html(entry[1])]);
             }
             table.draw()
             table.responsive.recalc()
