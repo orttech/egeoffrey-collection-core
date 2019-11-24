@@ -119,6 +119,13 @@ class Toolbar extends Widget {
             if (severity == "info") color = "success"
             if (severity == "value") color = "info"
             gui.notify(color, alert_text)
+            // notify the andoid device if running within an app
+            if (typeof Android !== "undefined" && Android !== null) {
+                Android.notify(window.EGEOFFREY_ID, severity, alert_text);
+            }
+            try {
+                webkit.messageHandlers.notify.postMessage([window.EGEOFFREY_ID, severity, alert_text]);
+            } catch(err) {}
         }
         // last 24 hours counter
         else if (message.sender == "controller/db" && message.command == "GET_COUNT") {

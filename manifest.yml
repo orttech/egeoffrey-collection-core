@@ -208,6 +208,16 @@ modules:
       format: text
       name: template
       required: true
+- notification/mobile:
+    description: forward notifications to a list of configured devices running the
+      eGeoffrey mobile app
+    module_configuration:
+    - description: List of tokens of the mobile devices to be notified, comma separated
+        (to get the device token, open the eGeoffrey mobile app and tap on 'About')
+      format: string
+      name: devices
+      placeholder: Asadjaskld109213102312kljlcasldkd123
+      required: true
 - service/command:
     description: Run system commands
     service_configuration:
@@ -424,6 +434,6 @@ modules:
         placeholder: 70.11
         required: true
 package: egeoffrey-collection-core
-revision: 28
+revision: 29
 tags: collection core
 version: 1.0

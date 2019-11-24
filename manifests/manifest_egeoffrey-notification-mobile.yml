@@ -1,0 +1,22 @@
+branch: master
+description: forward notifications to a list of configured devices running the eGeoffrey
+  mobile app
+dockerhub: egeoffrey/egeoffrey-notification-mobile
+github: egeoffrey/egeoffrey-notification-mobile
+icon: mobile-alt
+manifest_schema: 2
+modules:
+- notification/mobile:
+    description: forward notifications to a list of configured devices running the
+      eGeoffrey mobile app
+    module_configuration:
+    - description: List of tokens of the mobile devices to be notified, comma separated
+        (to get the device token, open the eGeoffrey mobile app and tap on 'About')
+      format: string
+      name: devices
+      placeholder: Asadjaskld109213102312kljlcasldkd123
+      required: true
+package: egeoffrey-notification-mobile
+revision: 1
+tags: notification mobile ios android
+version: 1.0

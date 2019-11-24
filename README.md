@@ -75,6 +75,9 @@ To configure each module included in this package, once started, click on the *'
     - *to**: recipient email address(es), comma separated (e.g. user@email.com)
     - *subject**: subject of the email (e.g. House Notification)
     - *template**: template to use for the email's body
+- **notification/mobile**: forward notifications to a list of configured devices running the eGeoffrey mobile app
+  - Module configuration:
+    - *devices**: list of tokens of the mobile devices to be notified, comma separated (to get the device token, open the eGeoffrey mobile app and tap on 'About') (e.g. Asadjaskld109213102312kljlcasldkd123)
 - **service/command**: run system commands
   - Service configuration:
     - Mode 'actuator':
@@ -122,10 +125,10 @@ To configure each module included in this package, once started, click on the *'
     - *username*: the username for authenticating against the mqtt broker (e.g. username)
     - *password*: the password for authenticating against the mqtt broker (e.g. password)
   - Service configuration:
-    - Mode 'push':
-      - *topic**: the topic to subscribe (e.g. /sensors/in)
     - Mode 'actuator':
       - *topic**: the topic to publish to (e.g. /sensors/out)
+    - Mode 'push':
+      - *topic**: the topic to subscribe (e.g. /sensors/in)
 - **service/openweathermap**: retrieve weather information from OpenWeatherMap
   - Module configuration:
     - *api_key**: your OpenWeatherMap API key
@@ -190,4 +193,4 @@ collection core
 
 ## Version
 
-The version of this egeoffrey-collection-core is 1.0-28 on the master branch.
+The version of this egeoffrey-collection-core is 1.0-29 on the master branch.

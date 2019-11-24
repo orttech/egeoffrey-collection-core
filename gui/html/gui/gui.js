@@ -58,15 +58,8 @@ class Gui extends Module {
         this.scheduler_events = []
         // check for updates after login
         this.check_for_updates = true
-        // safeguard, if not receiving a configuration file timely, disconnect
-        setTimeout(function(this_class) {
-            return function() {
-                if (Object.keys(this_class.settings).length === 0) {
-                    this_class.log_error("Timeout in receiving the configuration, disconnecting")
-                    this_class.join()
-                }
-            };
-        }(this), 2000);
+        // flag set on when the user is logged in
+        this.logged_in = false
     }
     
 	// notify the user about something
@@ -138,6 +131,8 @@ class Gui extends Module {
             window.location.hash = '#'+gui.settings["default_page"]
             return
         }
+        // keep track of the current page
+        localStorage.setItem("EGEOFFREY_CURRENT_PAGE", page_id)
 		// if loading the page for the first time, draw the menu and toolbar (otherwise unload_page() would reset pending requests)
 		if (! this.first_page_loaded) {
 			this.menu.draw()
@@ -148,7 +143,7 @@ class Gui extends Module {
         if (page_id.startsWith("__")) {
             this.page = new Page("SYSTEM", page_id, "")
         }
-        // load user's page
+        // load user's custom page
         else {
             this.waiting_for_page = true
             if (this.page_listener != null) this.remove_listener(this.page_listener)
@@ -174,9 +169,9 @@ class Gui extends Module {
     // check if the user is authenticated
     is_authenticated() {
         // authenticate the user
-        if (! (this.username in this.users)) this.join()
+        if (! (this.username in this.users)) this.logout()
         var user = this.users[this.username]
-        if ("password" in user && user["password"] != this.password) this.join()
+        if ("password" in user && user["password"] != this.password) this.logout()
         $("#user_icon").addClass("fa-"+user["icon"])
         $("#user_fullname").html('<i class="fas fa-sign-out-alt"></i> '+user["fullname"])
         $("#user_fullname").unbind().click(function(this_class) {
@@ -184,9 +179,15 @@ class Gui extends Module {
                 // clear stored credentials
                 localStorage.clear()
                 // disconnect
-                this_class.join()
+                this_class.logout()
             };
         }(this));
+    }
+
+    // log out the user
+    logout() {
+        this.logged_in = false
+        this.join()
     }
     
     // animate the logo
@@ -242,6 +243,28 @@ class Gui extends Module {
     on_start() {
         // ensure the user is authenticated
         this.is_authenticated()
+        // user logged in successfully
+        this.logged_in = true
+        $("#body").html('<center><i class="fas fa-spin fa-spinner"></i> Loading...</center>')
+        // safeguard, if not receiving a configuration file timely, disconnect
+        setTimeout(function(this_class) {
+            return function() {
+                if (Object.keys(this_class.settings).length === 0) {
+                    this_class.log_error("Timeout in receiving the configuration, disconnecting")
+                    this_class.logout()
+                }
+            };
+        }(this), 3000);
+        // periodically send keepalive messages to keep connection open (default timeout is 60 seconds)
+        setInterval(function(this_class) {
+            return function() {
+                var message = new Message(gui)
+                message.recipient = "*/*"
+                message.command = "KEEPALIVE"
+                message.args = "0"
+                this_class.send(message)
+            };
+        }(this), 20000);
         // if a page is requested, load it
         this.load_page()
         // whenever the hash changes, load the requested page
@@ -260,7 +283,7 @@ class Gui extends Module {
     
     // What to do when disconnecting
     on_disconnect() {
-        $("#body").empty()
+        $("#body").html('<center><i class="fas fa-spin fa-spinner"></i> Loading...</center>')
         $("#user_fullname").html("");
         $("#status").html("");
     }

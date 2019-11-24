@@ -153,6 +153,7 @@ class Login {
         }(this))
         // periodically check if the connection is established, otherwise show login page
         if (this.watchdog != null) clearInterval(this.watchdog)
+        var this_class = this
         this.watchdog = setInterval(function() {
             $("#login_button").prop("disabled", false)
             $("#login_button").html(locale("login.login_button"))
@@ -183,20 +184,34 @@ class Login {
             }
             // already logged in, ensure we are still connected
             else {
-                if (!window.gui.connected) {
-                    // not connected, stop the current instance of the gui from connecting
-                    window.gui.join()
-                    // set login information from previous settings
-                    $("#egeoffrey_gateway_hostname").val(gui.gateway_hostname)
-                    $("#egeoffrey_gateway_port").val(gui.gateway_port)
-                    if (gui.gateway_ssl) $("#egeoffrey_gateway_ssl").iCheck('check')
-                    else $("#egeoffrey_gateway_ssl").iCheck('uncheck')
-                    $("#egeoffrey_id").val(gui.house_id)
-                    $("#egeoffrey_passcode").val(gui.house_passcode)
-                    $("#egeoffrey_username").val(gui.username)
-                    $("#egeoffrey_password").val(gui.password)
+                if (! window.gui.connected) {
+                    // if the user intentionally logged out, just disconnect and show the login screen back again
+                    if (! window.gui.logged_in) {
+                        // not connected, stop the current instance of the gui from connecting
+                        window.gui.join()
+                        // set login information from previous settings
+                        $("#egeoffrey_gateway_hostname").val(gui.gateway_hostname)
+                        $("#egeoffrey_gateway_port").val(gui.gateway_port)
+                        if (gui.gateway_ssl) $("#egeoffrey_gateway_ssl").iCheck('check')
+                        else $("#egeoffrey_gateway_ssl").iCheck('uncheck')
+                        $("#egeoffrey_id").val(gui.house_id)
+                        $("#egeoffrey_passcode").val(gui.house_passcode)
+                        $("#egeoffrey_username").val(gui.username)
+                        $("#egeoffrey_password").val(gui.password)
                         // show up the login screen
-                    $("#login").modal()
+                        $("#login").modal()
+                    // otherwise the user may have been disconnected (e.g. network change, timeout, app in background, etc.)
+                    } else {
+                        // check if the gui is in foreground (no need to connect and connect if it is not)
+                        if (window.EGEOFFREY_IN_FOREGROUND == null || window.EGEOFFREY_IN_FOREGROUND == true) {
+                            // create a new instance of the gui and run it
+                            window.gui = new Gui("gui", EGEOFFREY_USERNAME + "_" + this_class.generate_session_id())
+                            // retrieve and set previously opened page if any
+                            if (localStorage.getItem("EGEOFFREY_CURRENT_PAGE") != null) window.location.hash = '#'+localStorage.getItem("EGEOFFREY_CURRENT_PAGE")
+                            window.gui.logged_in = true
+                            window.gui.run()
+                        }
+                    }
                 }
             }
         }, 2000);
