@@ -72,8 +72,12 @@ class House extends Widget {
                             <label>Map API Key - used by the Map widget to draw interactive maps (<a target="_blank" href="http://developers.google.com/maps/documentation/embed/get-api-key">get it from here</a>)</label>\
                             <input type="text" id="'+this.id+'_gui_map_api_key" class="form-control">\
                         </div>\
+                        <div class="form-group">\
+                            <label>Check for Updates at Login</label>\
+                            <input type="checkbox" id="'+this.id+'_gui_check_for_updates" class="form-control">\
+                        </div>\
                         <div class="float-right">\
-                          <button type="button" class="btn btn-primary" id="'+this.id+'_house_save">Save</button>\
+                          <button type="button" class="btn btn-primary" id="'+this.id+'_gui_save">Save</button>\
                         </div>\
                     </form>\
                 </div>\
@@ -164,8 +168,11 @@ class House extends Widget {
                 var configuration = {}
                 $("#"+this_class.id+"_form_gui :input").each(function(e){
                     var item = this.id.replace(this_class.id+"_gui_", "")
-                    var value = this.value
-                    if (value != null && value != "") configuration[item] = $.isNumeric(value) ? parseFloat(value) : value
+                    if (this.value != null && this.value != "") {
+                        if (this.type == "checkbox") configuration[item] = this.checked
+                        else if ($.isNumeric(this.value)) configuration[item] = parseFloat(this.value)
+                        else configuration[item] = this.value
+                    }
                 });
                 // save configuration
                 var message = new Message(gui)
@@ -200,11 +207,11 @@ class House extends Widget {
                 $("#"+this_class.id+"_users_tab_content > div").each(function(e){
                     // identify the selected tab/user
                     if (! $("#"+this.id).hasClass("active")) return
-                    var username = this.id.replace(id+"_users_", "").replace("_tab_content", "")
+                    username = this.id.replace(id+"_users_", "").replace("_tab_content", "")
                 });
                 // delete the tab
-                $("#"+id+'_users_'+username+'_tab').remove()
-                $("#"+id+'_users_'+username+'_tab_content').remove()
+                $("#"+this_class.id+'_users_'+username+'_tab').remove()
+                $("#"+this_class.id+'_users_'+username+'_tab_content').remove()
                 // select the first user left
                 var first = true
                 $("#"+this_class.id+"_users_tabs > a").each(function(e){
@@ -452,6 +459,7 @@ class House extends Widget {
             for (var configuration of ["default_page", "map_api_key"]) {
                 $("#"+this.id+"_gui_"+configuration).val(data[configuration])
             }
+            $("#"+this.id+"_gui_check_for_updates").prop("checked", data["check_for_updates"])
         }
         // receiving users configuration
         else if (message.args == "gui/users") {

@@ -29,7 +29,7 @@ class Gui extends Module {
         // managed configuration schema
         this.page_config_schema = 1
         this.chart_config_schema = 1
-        this.settings_config_schema = 1
+        this.settings_config_schema = 2
         this.menu_config_schema = 1
         this.users_config_schema = 1
         this.groups_config_schema = 1
@@ -56,8 +56,6 @@ class Gui extends Module {
         this.maps_loaded = false
         // scheduler's events
         this.scheduler_events = []
-        // check for updates after login
-        this.check_for_updates = true
         // flag set on when the user is logged in
         this.logged_in = false
     }
@@ -173,15 +171,7 @@ class Gui extends Module {
         var user = this.users[this.username]
         if ("password" in user && user["password"] != this.password) this.logout()
         $("#user_icon").addClass("fa-"+user["icon"])
-        $("#user_fullname").html('<i class="fas fa-sign-out-alt"></i> '+user["fullname"])
-        $("#user_fullname").unbind().click(function(this_class) {
-            return function () {
-                // clear stored credentials
-                localStorage.clear()
-                // disconnect
-                this_class.logout()
-            };
-        }(this));
+        $("#user_fullname").html(user["fullname"])
     }
 
     // log out the user
@@ -356,10 +346,16 @@ class Gui extends Module {
             }, 1000);
         }
         else if (message.args == "gui/settings") {
+            if (message.config_schema == 1) {
+                var config = message.get_data()
+                config["check_for_updates"] = true
+                this.upgrade_config(message.args, message.config_schema, 2, config)
+                return false
+            }
             if (message.config_schema != this.settings_config_schema) {
                 return false
             }
-            if (! this.is_valid_configuration(["default_page"], message.get_data())) return false
+            if (! this.is_valid_configuration(["default_page", "check_for_updates"], message.get_data())) return false
             this.settings = message.get_data()
         }
         else if (message.args == "gui/users") {

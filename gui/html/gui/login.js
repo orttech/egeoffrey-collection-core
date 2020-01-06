@@ -81,6 +81,32 @@ class Login {
                         </div>\
                     </div>\
                 </div>\
+                <div class="card card-primary collapsed-card">\
+                    <div class="card-header with-border">\
+                        <h3 class="card-title"><i class="fas fa-cogs"></i> Advanced</h3>\
+\
+                        <div class="card-tools pull-right">\
+                            <button type="button" class="btn btn-card-tool" data-widget="collapse"><i class="fa fa-plus"></i>\
+                            </button>\
+                        </div>\
+                    </div>\
+                    <div class="card-body">\
+                        <div class="form-group has-feedback">\
+                            <div class="checkbox icheck">\
+                                <label>\
+                                    <input type="checkbox" id="egeoffrey_debug"> Enable Debug\
+                                </label>\
+                            </div>\
+                        </div>\
+                        <div class="form-group has-feedback">\
+                            <div class="checkbox icheck">\
+                                <label>\
+                                    <input type="checkbox" id="egeoffrey_logging_remote"> Enable Remote Logging\
+                                </label>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </div>\
                 <center>\
                     <p class="text-red" id="login_error"></p>\
                 </center>\
@@ -135,8 +161,11 @@ class Login {
                 window.EGEOFFREY_USERNAME = $("#egeoffrey_username").val()
                 window.EGEOFFREY_PASSWORD = $("#egeoffrey_password").val()
                 window.EGEOFFREY_REMEMBER_ME = $("#egeoffrey_remember_me").is(":checked") ? 1 : 0
+                window.EGEOFFREY_DEBUG = $("#egeoffrey_debug").is(":checked") ? 1 : 0
+                window.EGEOFFREY_LOGGING_REMOTE = $("#egeoffrey_logging_remote").is(":checked") ? 1 : 0
                     // create a new instance of the gui and run it
                 window.gui = new Gui("gui", EGEOFFREY_USERNAME + "_" + this_class.generate_session_id())
+                this_class.restore_page()
                 window.gui.run()
                 login_submit = true
             };
@@ -151,6 +180,15 @@ class Login {
                 this_class.draw()
             };
         }(this))
+        // configure logout button
+        $("#user_logout").unbind().click(function() {
+            return function () {
+                // clear stored credentials
+                localStorage.clear()
+                // disconnect
+                window.gui.logout()
+            };
+        }());
         // periodically check if the connection is established, otherwise show login page
         if (this.watchdog != null) clearInterval(this.watchdog)
         var this_class = this
@@ -207,7 +245,7 @@ class Login {
                             // create a new instance of the gui and run it
                             window.gui = new Gui("gui", EGEOFFREY_USERNAME + "_" + this_class.generate_session_id())
                             // retrieve and set previously opened page if any
-                            if (localStorage.getItem("EGEOFFREY_CURRENT_PAGE") != null) window.location.hash = '#'+localStorage.getItem("EGEOFFREY_CURRENT_PAGE")
+                            this.restore_page()
                             window.gui.logged_in = true
                             window.gui.run()
                         }
@@ -216,6 +254,11 @@ class Login {
             }
         }, 2000);
     }
+    
+    // restore last opened page
+    restore_page() {
+        if (localStorage.getItem("EGEOFFREY_CURRENT_PAGE") != null) window.location.hash = '#'+localStorage.getItem("EGEOFFREY_CURRENT_PAGE")
+    }    
     
     // generate a random session_id
     generate_session_id() {
@@ -242,6 +285,7 @@ class Login {
         }
         // create a gui and start it
         window.gui = new Gui("gui", "guest_" + this.generate_session_id())
+        this.restore_page()
         window.gui.run()
     }
 }

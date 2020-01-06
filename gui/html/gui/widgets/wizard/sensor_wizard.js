@@ -80,6 +80,18 @@ class Sensor_wizard extends Widget {
                             <label>Unit</label>\
                             <input type="text" id="'+this.id+'_unit" class="form-control" placeholder="e.g. °C">\
                         </div>\
+                        <div class="form-group">\
+                            <label>Minimum Value (discard those below this value)</label>\
+                            <input type="text" id="'+this.id+'_min_value" class="form-control" placeholder="e.g. 100">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Maximum Value (discard those above this value)</label>\
+                            <input type="text" id="'+this.id+'_max_value" class="form-control" placeholder="e.g. 500">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Allowed Values (discard those different than one of the following, comma separated)</label>\
+                            <input type="text" id="'+this.id+'_allowed_values" class="form-control" placeholder="e.g. clear,cloudy,thunderstorm">\
+                        </div>\
                     </div>\
                     <div class="tab-pane fade" id="'+this.id+'_tab_processing_content" role="tabpanel" aria-labelledby="'+this.id+'_tab_processing">\
                         <div class="form-group">\
@@ -91,8 +103,12 @@ class Sensor_wizard extends Widget {
                             <select id="'+this.id+'_retain" class="form-control"></select>\
                         </div>\
                         <div class="form-group">\
-                            <label>Transform Data After Acquisition</label>\
+                            <label>Convert acquired value before being saved</label>\
                             <select id="'+this.id+'_post_processor" class="form-control"></select>\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Convert input value before being sent to an actuator</label>\
+                            <select id="'+this.id+'_pre_processor" class="form-control"></select>\
                         </div>\
                     </div>\
                     <div class="tab-pane fade" id="'+this.id+'_tab_service_content" role="tabpanel" aria-labelledby="'+this.id+'_tab_service">\
@@ -300,7 +316,7 @@ class Sensor_wizard extends Widget {
                 var sensor_id = $("#"+this_class.id+"_sensor_id").val()
                 // build up the configuration file
                 var sensor = {}
-                for (var item of ["description", "icon", "format", "unit", "calculate", "retain", "post_processor"]) {
+                for (var item of ["description", "icon", "format", "unit", "min_value", "max_value", "allowed_values", "calculate", "retain", "post_processor", "pre_processor"]) {
                     var value = $("#"+this_class.id+"_"+item).val()
                     if (value == null || value == "") continue
                     sensor[item] = $.isNumeric(value) ? parseFloat(value) : value
@@ -363,7 +379,7 @@ class Sensor_wizard extends Widget {
             window.history.back()
         })
         // ask for controller/hub configuration
-        this.add_configuration_listener("controller/hub", 2)
+        this.add_configuration_listener("controller/hub", 3)
         // request manifests for all the services
         this.add_broadcast_listener("+/+", "MANIFEST", "#")
         // extract requested sensor from URL
@@ -418,12 +434,19 @@ class Sensor_wizard extends Widget {
                     }));
                 }
             }
-            // delete all options 
+            // Populate processors
             $('#'+this.id+'_post_processor').find('option').remove()
-            // add it to the select   
             $('#'+this.id+'_post_processor').append($('<option>', { value: "", text: "None" }));
-            for (var value in data["post_processors"]) {
+            for (var value in data["processors"]) {
                 $('#'+this.id+'_post_processor').append($('<option>', {
+                    value: escape_html(value),
+                    text: value
+                }));
+            }
+            $('#'+this.id+'_pre_processor').find('option').remove()
+            $('#'+this.id+'_pre_processor').append($('<option>', { value: "", text: "None" }));
+            for (var value in data["processors"]) {
+                $('#'+this.id+'_pre_processor').append($('<option>', {
                     value: escape_html(value),
                     text: value
                 }));
@@ -437,7 +460,7 @@ class Sensor_wizard extends Widget {
             $("#"+this.id+"_sensor_id").val(sensor_id)
             $("#"+this.id+"_sensor_id").prop("disabled", true)
             // populate the rest of the form
-            for (var item of ["description", "icon", "format", "unit", "calculate", "retain", "post_processor"]) {
+            for (var item of ["description", "icon", "format", "unit", "min_value", "max_value", "allowed_values", "calculate", "retain", "post_processor", "pre_processor"]) {
                 if (item in sensor) $("#"+this.id+"_"+item).val(sensor[item])
             }
             // populate disabled checkbox

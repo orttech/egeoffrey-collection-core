@@ -159,7 +159,7 @@ class Rule_wizard extends Widget {
                         <div class="text-right"><a onClick=\'$("#'+this.id+'_help_conditions\").toggleClass(\"d-none\")\'><i class="fas fa-question-circle text-info fa-1x"></i></a></div>\
                         <div id="'+this.id+'_help_conditions" class="callout callout-info d-none">\
                             <p>Previously defined constants and variables can be compared in conditions. The rule triggers if all the conditions of a block evaluate to true (AND). If there are multiple blocks the rule triggers when at least one block evaluate true (OR).</p>\
-                            <p>The condition has to be in the format <code>&lt;variable_id|constant_id&gt; [==|!=|&lt;|&gt;] &lt;variable_id|constant_id&gt;</code>.</p>\
+                            <p>The condition has to be in the format <code>&lt;variable_id|constant_id&gt; [==|!=|&lt;|&gt;|in] &lt;variable_id|constant_id&gt;</code>.</p>\
                             <p>Single subexpressions are also allowed on both the sides of the comparison by using parentheses and one of the following operators: <code>+|-|*|/</code>.</p>\
                             <p>Examples:</p>\
                             <ul>\

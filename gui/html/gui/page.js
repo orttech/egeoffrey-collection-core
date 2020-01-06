@@ -47,6 +47,7 @@ class Page {
         // if it is a system page, build the page layout and draw it
         else if (type == "SYSTEM") {
             if (page_id == "__sensor") {
+                if (! gui.is_authorized(["house_admins"])) return
                 if (! location.hash.includes("=")) return
                 var request = location.hash.split("=")
                 var sensor_id = request[1]
@@ -105,22 +106,27 @@ class Page {
                 this.draw(page_layout)
             }
             else if (page_id == "__sensor_wizard") {
+                if (! gui.is_authorized(["house_admins"])) { this.unauthorized(); return }
                 var widget_object = new Sensor_wizard("sensor_wizard", {})
                 widget_object.draw()
             }
             else if (page_id == "__rule_wizard") {
+                if (! gui.is_authorized(["house_admins"])) { this.unauthorized(); return }
                 var widget_object = new Rule_wizard("rule_wizard", {})
                 widget_object.draw()
             }
             else if (page_id == "__module_wizard") {
+                if (! gui.is_authorized(["house_admins"])) { this.unauthorized(); return }
                 var widget_object = new Module_wizard("module_wizard", {})
                 widget_object.draw()
             }
             else if (page_id == "__menu_item_wizard") {
+                if (! gui.is_authorized(["house_admins"])) { this.unauthorized(); return }
                 var widget_object = new Menu_item_wizard("menu_item_wizard", {})
                 widget_object.draw()
             }
             else if (page_id == "__menu_section_wizard") {
+                if (! gui.is_authorized(["house_admins"])) { this.unauthorized(); return }
                 var widget_object = new Menu_section_wizard("menu_section_wizard", {})
                 widget_object.draw()
             }
@@ -129,18 +135,22 @@ class Page {
                 this.draw(page_layout)
             }
             else if (page_id == "__configuration") {
+                if (! gui.is_authorized(["egeoffrey_admins"])) { this.unauthorized(); return }
                 var page_layout = [ { "": [ { "title": "Configuration Editor", "size": 12, "widget": "__configuration" } ] } ]
                 this.draw(page_layout)
             }
             else if (page_id == "__database") {
+                if (! gui.is_authorized(["egeoffrey_admins"])) { this.unauthorized(); return }
                 var page_layout = [ { "": [ { "title": "Database Inspector", "size": 12, "widget": "__database" } ] } ]
                 this.draw(page_layout)
             }
             else if (page_id == "__gateway") {
+                if (! gui.is_authorized(["egeoffrey_admins"])) { this.unauthorized(); return }
                 var page_layout = [ { "": [ { "title": "Gateway Inspector", "size": 12, "widget": "__gateway" } ] } ]
                 this.draw(page_layout)
             }
             else if (page_id == "__house") {
+                if (! gui.is_authorized(["house_admins"])) { this.unauthorized(); return }
                 var page_layout = [ { "": [ { "title": "House Configuration", "size": 12, "widget": "__house" } ] } ]
                 this.draw(page_layout)
             }
@@ -149,22 +159,27 @@ class Page {
                 this.draw(page_layout)
             }
             else if (page_id == "__logs") {
+                if (! gui.is_authorized(["egeoffrey_admins"])) { this.unauthorized(); return }
                 var page_layout = [ { "": [ { "title": "Log Inspector", "size": 12, "widget": "__logs" } ] } ]
                 this.draw(page_layout)
             }
             else if (page_id == "__modules") {
+                if (! gui.is_authorized(["egeoffrey_admins"])) { this.unauthorized(); return }
                 var page_layout = [ { "": [ { "title": "Modules", "size": 12, "widget": "__modules" } ] } ]
                 this.draw(page_layout)
             }
             else if (page_id == "__packages") {
+                if (! gui.is_authorized(["egeoffrey_admins"])) { this.unauthorized(); return }
                 var page_layout = [ { "": [ { "title": "Packages", "size": 12, "widget": "__packages" } ] } ]
                 this.draw(page_layout)
             }
             else if (page_id == "__rules") {
+                if (! gui.is_authorized(["house_admins"])) { this.unauthorized(); return }
                 var page_layout = [ { "": [ { "title": "Rules", "size": 12, "widget": "__rules" } ] } ]
                 this.draw(page_layout)
             }
             else if (page_id == "__sensors") {
+                if (! gui.is_authorized(["house_admins"])) { this.unauthorized(); return }
                 var page_layout = [ { "": [ { "title": "Registered Sensors", "size": 12, "widget": "__sensors" } ] } ]
                 this.draw(page_layout)
             }
@@ -195,7 +210,7 @@ class Page {
                       {
                         "color": "red",
                         "icon": "ban",
-                        "link": "overview/notifications=ALERT",
+                        "link": "__notifications=ALERT",
                         "scope": "alerts",
                         "sensor": "alert",
                         "size": 4,
@@ -205,7 +220,7 @@ class Page {
                       {
                         "color": "yellow",
                         "icon": "exclamation-triangle",
-                        "link": "overview/notifications=WARNING",
+                        "link": "__notifications=WARNING",
                         "scope": "alerts",
                         "sensor": "warning",
                         "size": 4,
@@ -215,7 +230,7 @@ class Page {
                       {
                         "color": "info",
                         "icon": "info",
-                        "link": "overview/notifications=INFO",
+                        "link": "__notifications=INFO",
                         "scope": "alerts",
                         "sensor": "info",
                         "size": 4,
@@ -279,6 +294,12 @@ class Page {
                 this.draw(page_layout)
             }
         }
+    }
+    
+    // print an error message when the user is not authorized to access the page
+    unauthorized() {
+        $("#body").empty()
+        $("#body").append('<center><h3>You are not authorized to access this page</h3></center>');
     }
     
     // add a new row to the page
@@ -516,6 +537,10 @@ class Page {
                         <a class="nav-link" id="'+id+'_tab_notifications" data-toggle="pill" href="#'+id+'_tab_notifications_content"  role="tab" aria-controls="'+id+'_tab_notifications_content" aria-selected="false">Notifications</a>\
                     </li>\
                     \
+                    <li class="nav-item d-none">\
+                        <a class="nav-link" id="'+id+'_tab_slider" data-toggle="pill" href="#'+id+'_tab_slider_content"  role="tab" aria-controls="'+id+'_tab_slider_content" aria-selected="false">Slider</a>\
+                    </li>\
+                    \
                     <li class="nav-item">\
                         <a class="nav-link" id="'+id+'_tab_permissions" data-toggle="pill" href="#'+id+'_tab_permissions_content"  role="tab" aria-controls="'+id+'_tab_permissions_content" aria-selected="false">Permissions</a>\
                     </li>\
@@ -564,6 +589,7 @@ class Page {
                                 <option value="tasks">Tasks - display a to-do list</option>\
                                 <option value="notifications">Notifications - list the latest notifications</option>\
                                 <option value="chatbot">Chatbot - display the interactive chatbot</option>\
+                                <option value="slider">Slider - display a range slider</option>\
                             </select>\
                         </div>\
                         <div class="form-group">\
@@ -780,6 +806,10 @@ class Page {
                             <label>Widget Style</label>\
                             <input type="text" id="'+id+'_input_variant" class="form-control" placeholder="1 (default) for small box, 2 for larger box">\
                         </div>\
+                        <div class="form-group">\
+                            <label>Allowed Values</label>\
+                            <input type="text" id="'+id+'_input_allowed_values" class="form-control" placeholder="e.g. ON,OFF">\
+                        </div>\
                     </div>\
                     \
                     <div class="tab-pane fade" id="'+id+'_tab_button_content" role="tabpanel" aria-labelledby="'+id+'_tab_button">\
@@ -934,6 +964,41 @@ class Page {
                         </div>\
                     </div>\
                     \
+                    <div class="tab-pane fade" id="'+id+'_tab_slider_content" role="tabpanel" aria-labelledby="'+id+'_tab_slider">\
+                        <div class="form-group">\
+                            <label>Sensor*</label>\
+                            <input type="text" id="'+id+'_slider_sensor" class="form-control" placeholder="the sensor whose value has to be displayed" required>\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Icon</label>\
+                            <input type="text" id="'+id+'_slider_icon" class="form-control" placeholder="the icon to display next to the slider">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Color of the icon</label>\
+                            <input type="text" id="'+id+'_slider_color" class="form-control" placeholder="color of the icon, leave empty for default">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Widget Style</label>\
+                            <input type="text" id="'+id+'_slider_variant" class="form-control" placeholder="1 (default) for small box, 2 for larger box">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Minimum value of the slider</label>\
+                            <input type="text" id="'+id+'_slider_min_value" class="form-control" placeholder="e.g. 100">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Maximum value of the slider</label>\
+                            <input type="text" id="'+id+'_slider_max_value" class="form-control" placeholder="e.g. 500">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Step between values of the slider</label>\
+                            <input type="text" id="'+id+'_slider_step" class="form-control" placeholder="e.g. 10">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Normalize the values to a percentage</label>\
+                            <input type="checkbox" class="form-control" id="'+id+'_slider_show_percentage">\
+                        </div>\
+                    </div>\
+                    \
                     <div class="tab-pane fade" id="'+id+'_tab_permissions_content" role="tabpanel" aria-labelledby="'+id+'_tab_permissions">\
                         <div class="form-group">\
                             <label>Authorized Groups</label>\
@@ -966,7 +1031,7 @@ class Page {
         simple_types["range"] = ["sensor", "group_by", "timeframe"]
         simple_types["status"] = ["sensor", "timestamp_sensor", "variant"]
         simple_types["control"] = ["sensor", "icon", "color", "timestamp_sensor", "icon_sensor", "variant"]
-        simple_types["input"] = ["sensor", "icon", "color", "timestamp_sensor", "icon_sensor", "variant"]
+        simple_types["input"] = ["sensor", "icon", "color", "timestamp_sensor", "icon_sensor", "variant", "allowed_values"]
         simple_types["button"] = ["text", "icon", "color", "icon_sensor", "variant"]
         simple_types["calendar"] = ["sensor", "time_step", "default_value", "event_template"]
         simple_types["image"] = ["sensor"]
@@ -977,6 +1042,7 @@ class Page {
         simple_types["logs"] = ["show_only"]
         simple_types["notifications"] = ["show_only"]
         simple_types["map"] = ["map_type", "timeframe"]
+        simple_types["slider"] = ["sensor", "icon", "color", "variant", "min_value", "max_value", "step"]
         var array_types = {}
         array_types["summary"] = ["sensors"]
         array_types["timeline"] = ["sensors"]
@@ -987,6 +1053,7 @@ class Page {
         var checkbox_types = {}
         checkbox_types["timeline"] = ["no_range"]
         checkbox_types["map"] = ["tracking"]
+        checkbox_types["slider"] = ["show_percentage"]
         // editing the widget, fill in the values
         if (widget != null) {
             // general tab elements
@@ -1335,6 +1402,7 @@ class Page {
         else if (widget["widget"] == "tasks") widget_object = new Tasks(id, widget)
         else if (widget["widget"] == "notifications") widget_object = new Notifications(id, widget)
         else if (widget["widget"] == "chatbot") widget_object = new Chatbot(id, widget)
+        else if (widget["widget"] == "slider") widget_object = new Value(id, widget)
         // system widgets
         else if (widget["widget"] == "__packages") widget_object = new Packages(id, widget)
         else if (widget["widget"] == "__modules") widget_object = new Modules(id, widget)

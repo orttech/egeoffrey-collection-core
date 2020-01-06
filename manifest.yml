@@ -118,6 +118,19 @@ modules:
       name: channel
       placeholder: channel_name
       required: true
+- interaction/telegram_messenger:
+    description: Connect to a Telegram group as a bot and interact with the user
+    module_configuration:
+    - description: The token of the Telegram bot you have created (https://core.telegram.org/bots#3-how-do-i-create-a-bot)
+      format: string
+      name: bot_token
+      required: true
+    - description: The command to use as a prefix for interacting with the bot (e.g.
+        /housebot hi)
+      format: string
+      name: command_handler
+      placeholder: housebot
+      required: true
 - notification/betamax_sms:
     description: send out sms notifications (betamax voip service)
     module_configuration:
@@ -217,6 +230,17 @@ modules:
       format: string
       name: devices
       placeholder: Asadjaskld109213102312kljlcasldkd123
+      required: true
+- notification/telegram_messenger:
+    description: Send a notification via Telegram to a user or a group
+    module_configuration:
+    - description: The token of the Telegram bot you have created (https://core.telegram.org/bots#3-how-do-i-create-a-bot)
+      format: string
+      name: bot_token
+      required: true
+    - description: The chat_id you want to send the message to (https://t.me/gettingidbot)
+      format: string
+      name: chat_id
       required: true
 - service/command:
     description: Run system commands
@@ -434,6 +458,6 @@ modules:
         placeholder: 70.11
         required: true
 package: egeoffrey-collection-core
-revision: 29
+revision: 30
 tags: collection core
 version: 1.0

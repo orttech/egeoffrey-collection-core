@@ -50,8 +50,17 @@ class Sensors extends Widget {
         var button_html = '\
             <div class="form-group">\
                 <button type="button" id="'+this.id+'_new" class="btn btn-block btn-primary btn-lg"><i class="fas fa-plus"></i> Register a new sensor</button>\
+            </div>\
+            <div class="form-group float-right">&nbsp;\
+                <button type="button" id="'+this.id+'_request_data" class="btn btn-default btn-sm"><i class="fas fa-sync text-success"></i> Request All Values</button>\
             </div>'
         $(body).append(button_html)
+        // configure buttons
+        $("#"+this.id+"_request_data").unbind().click(function(this_class) {
+            return function () {
+                for (var sensor_id in this_class.sensors) this_class.request_data(sensor_id)
+            };
+        }(this));
         $("#"+this.id+"_new").unbind().click(function(this_class) {
             return function () {
                 window.location.hash = '#__sensor_wizard'
@@ -122,7 +131,7 @@ class Sensors extends Widget {
         // discover registered sensors
         this.listener = this.add_configuration_listener("sensors/#", gui.supported_sensors_config_schema)
         // request controller/hub
-        this.add_configuration_listener("controller/hub", 2)
+        this.add_configuration_listener("controller/hub", 3)
         // subscribe for acknoledgments from the database for saved values
         this.add_inspection_listener("controller/db", "*/*", "SAVED", "#")
     }
@@ -219,6 +228,7 @@ class Sensors extends Widget {
                         </button>\
                         <div class="dropdown-menu" role="menu">\
                             <a class="dropdown-item" id="'+this.id+'_poll_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-play"></i> Poll Service</a>\
+                            <a class="dropdown-item" id="'+this.id+'_request_data_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-sync"></i> Request Value</a>\
                             <a class="dropdown-item" id="'+this.id+'_set_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-sign-out-alt"></i> Set Value</a>\
                             <a class="dropdown-item" id="'+this.id+'_graph_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-chart-bar"></i> Show Graph</a>\
                             <a class="dropdown-item" id="'+this.id+'_edit_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-edit"></i> Edit Sensor</a>\
@@ -261,8 +271,6 @@ class Sensors extends Widget {
             var row = table.row.add(row_data).draw(false);
             table.responsive.recalc()
             if (table.data().count() == 0) $("#"+this.id+"_table_text").html('No data to display')
-            // request value and timestamp
-            this.request_data(sensor_id)
             // enable graph and set button
             if (sensor["format"] != "float_1" && sensor["format"] != "float_2" && sensor["format"] != "string" && sensor["format"] != "int") {
                 $("#"+this.id+"_graph_"+sensor_tag).addClass("d-none");
@@ -280,6 +288,12 @@ class Sensors extends Widget {
                     gui.notify("info", "Requesting to poll the service associated to "+sensor_id)
                 };
             }(sensor_id));
+            // request the latest value for the sensor so to populate the table
+            $("#"+this.id+"_request_data_"+sensor_tag).unbind().click(function(this_class, sensor_id) {
+                return function () {
+                    this_class.request_data(sensor_id)
+                };
+            }(this, sensor_id));
             // manually set the value to a sensor
             $("#"+this.id+"_set_"+sensor_tag).unbind().click(function(id, sensor_id) {
                 return function () {

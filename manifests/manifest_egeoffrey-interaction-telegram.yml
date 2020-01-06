@@ -1,0 +1,24 @@
+branch: master
+description: Connect to a Telegram group as a bot and interact with the users
+dockerhub: egeoffrey/egeoffrey-interaction-telegram
+github: egeoffrey/egeoffrey-interaction-telegram
+icon: hashtag
+manifest_schema: 2
+modules:
+- interaction/telegram_messenger:
+    description: Connect to a Telegram group as a bot and interact with the user
+    module_configuration:
+    - description: The token of the Telegram bot you have created (https://core.telegram.org/bots#3-how-do-i-create-a-bot)
+      format: string
+      name: bot_token
+      required: true
+    - description: The command to use as a prefix for interacting with the bot (e.g.
+        /housebot hi)
+      format: string
+      name: command_handler
+      placeholder: housebot
+      required: true
+package: egeoffrey-interaction-telegram
+revision: 1
+tags: interaction telegram
+version: 1.0

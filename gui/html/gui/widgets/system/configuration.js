@@ -4,6 +4,8 @@ class Configuration extends Widget {
         super(id, widget)
         // map configuration filename with tab_id
         this.tabs = {}
+        // map configuration filename with latest config schema
+        this.tabs_schema = {}
         // array of configuration topics
         this.topics = []
         // tab count
@@ -29,6 +31,7 @@ class Configuration extends Widget {
         }
         this.topics = []
         this.tabs = {}
+        this.tabs_schema = {}
         this.tabs_count = 1
         // request configurations to display
         for (var configuration of configuration_array) {
@@ -155,15 +158,21 @@ class Configuration extends Widget {
         var active = this.tabs_count == 1 ? "active" : ""
         var tab_id = this.id+'_tab_'+this.tabs_count
         // configuration file already has already a tab, update the content
-        if (message.args in this.tabs) {
+        if (message.args in this.tabs && message.config_schema >= this.tabs_schema[message.args]) {
             var tab_id = this.tabs[message.args]
+            // set the value to the textarea
             $("#"+tab_id+'_text').val(jsyaml.dump(message.get_data()))
+            // update the codemirror value accordingly
+            $("#"+tab_id+'_text + .CodeMirror').get(0).CodeMirror.setValue($("#"+tab_id+'_text').val())
+            // keep track of the latest schema version
+            this.tabs_schema[message.args] = message.config_schema
         }
         // new configuration file, add a new tab
         else {
             // show only requested file
             if (this.configuration_id != null && message.args != this.configuration_id) return
             this.tabs[message.args] = tab_id
+            this.tabs_schema[message.args] = message.config_schema
             // remove the prefix (e.g. sensors/) from the title
             var tab_title = message.args.replace(this.prefix, "")
             var is_new_item = tab_title == "__new__" ? true : false
@@ -204,35 +213,34 @@ class Configuration extends Widget {
                 })
             });
             // configure the save button
-            $("#"+tab_id+"_save").unbind().click(function(args, version, tab_id, is_new_item, codemirror) {
+            $("#"+tab_id+"_save").unbind().click(function(args, tabs_schema, tab_id, is_new_item, codemirror) {
                 return function () {
                     // sync the textarea with the editor
                     codemirror.save()
                     // ask the config module to save the new configuration
                     if ($("#"+tab_id+"_title").val() == "") {
-                        gui.notify("error","Invalid configuration filename")
+                        gui.notify("error", "Invalid configuration filename")
                         return
                     }
                     var message = new Message(gui)
                     message.recipient = "controller/config"
                     message.command = "SAVE"
                     message.args = is_new_item ? args.replace("__new__", $("#"+tab_id+"_title").val()) : args
-                    message.config_schema = is_new_item ? parseInt($("#"+tab_id+"_config_schema").val()) : version
+                    message.config_schema = is_new_item ? parseInt($("#"+tab_id+"_config_schema").val()) : tabs_schema[message.args]
                     try {
                         var yaml = jsyaml.load($("#"+tab_id+"_text").val())
                     } catch(e) {
                         gui.notify("error","Invalid configuration file: "+e.message)
                         return
                     }
-                    return
                     message.set_data(yaml)
                     gui.send(message)
-                    gui.notify("success","Configuration "+message.args+" saved successfully. Please manually restart any impacted module")
+                    gui.notify("success","Configuration "+message.args+" saved successfully. Please manually restart any impacted module if needed")
                     if (location.hash.includes("=")) window.history.back()
                 };
-            }(message.args, message.config_schema, tab_id, is_new_item, codemirror))
+            }(message.args, this.tabs_schema, tab_id, is_new_item, codemirror))
             // configure the delete button
-            $("#"+tab_id+"_delete").unbind().click(function(args, version) {
+            $("#"+tab_id+"_delete").unbind().click(function(args, tabs_schema) {
                 return function () {
                     gui.confirm("Do you really want to delete configuration file "+args+"?", function(result){ 
                         if (! result) return
@@ -240,12 +248,12 @@ class Configuration extends Widget {
                         message.recipient = "controller/config"
                         message.command = "DELETE"
                         message.args = args
-                        message.config_schema = version
+                        message.config_schema = tabs_schema[message.args]
                         gui.send(message)
                         gui.notify("info","Requesting to delete configuration file: "+args)
                     });
                 };
-            }(message.args, message.config_schema))
+            }(message.args, this.tabs_schema))
             // increment tab counter
             this.tabs_count++
         }

@@ -88,7 +88,11 @@
 
     <!--  js-yaml (yaml encoder/decoder) -->
     <script src="lib/js-yaml/js-yaml.min.js"></script>
-
+    
+    <!-- ion.rangeSlider (slider) -->
+    <link rel="stylesheet" href="lib/ion.rangeSlider/ion.rangeSlider.min.css" />
+    <script src="lib/ion.rangeSlider/ion.rangeSlider.min.js"></script>
+    
     <!--  eGeoffrey -->
     <script src="sdk/javascript/constants.js"></script>
     <script src="sdk/javascript/utils/strings.js"></script>
@@ -201,7 +205,7 @@
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <button type="button" class="btn btn-tool bg-info"><i id="user_icon" class="fas"></i></button>
                     <div class="pull-left info">
-                        <a id="user_fullname" href="#" class="d-block"></a>
+                        <a class="d-block" id="user_logout" style="cursor:pointer"><i class="fas fa-sign-out-alt"></i> <span id="user_fullname"></span></a>
                         <a id="status" class="d-block"><i class="fa fa-circle text-red"></i></a>
                     </div>
                 </div>

@@ -52,6 +52,10 @@ To configure each module included in this package, once started, click on the *'
     - *bot_token**: the Slack legacy token the chatbot will use to connect to Slack
     - *bot_name**: the name of the bot as it will show up on Slack (e.g. housebot)
     - *channel**: the name of the channel the chatbot has to join (e.g. channel_name)
+- **interaction/telegram_messenger**: connect to a Telegram group as a bot and interact with the user
+  - Module configuration:
+    - *bot_token**: the token of the Telegram bot you have created (https://core.telegram.org/bots#3-how-do-i-create-a-bot)
+    - *command_handler**: the command to use as a prefix for interacting with the bot (e.g. /housebot hi) (e.g. housebot)
 - **notification/betamax_sms**: send out sms notifications (betamax voip service)
   - Module configuration:
     - *from**: the phone number to be used as the from of the message (e.g. 112341231232)
@@ -78,6 +82,10 @@ To configure each module included in this package, once started, click on the *'
 - **notification/mobile**: forward notifications to a list of configured devices running the eGeoffrey mobile app
   - Module configuration:
     - *devices**: list of tokens of the mobile devices to be notified, comma separated (to get the device token, open the eGeoffrey mobile app and tap on 'About') (e.g. Asadjaskld109213102312kljlcasldkd123)
+- **notification/telegram_messenger**: send a notification via Telegram to a user or a group
+  - Module configuration:
+    - *bot_token**: the token of the Telegram bot you have created (https://core.telegram.org/bots#3-how-do-i-create-a-bot)
+    - *chat_id**: the chat_id you want to send the message to (https://t.me/gettingidbot)
 - **service/command**: run system commands
   - Service configuration:
     - Mode 'actuator':
@@ -125,10 +133,10 @@ To configure each module included in this package, once started, click on the *'
     - *username*: the username for authenticating against the mqtt broker (e.g. username)
     - *password*: the password for authenticating against the mqtt broker (e.g. password)
   - Service configuration:
-    - Mode 'actuator':
-      - *topic**: the topic to publish to (e.g. /sensors/out)
     - Mode 'push':
       - *topic**: the topic to subscribe (e.g. /sensors/in)
+    - Mode 'actuator':
+      - *topic**: the topic to publish to (e.g. /sensors/out)
 - **service/openweathermap**: retrieve weather information from OpenWeatherMap
   - Module configuration:
     - *api_key**: your OpenWeatherMap API key
@@ -193,4 +201,4 @@ collection core
 
 ## Version
 
-The version of this egeoffrey-collection-core is 1.0-29 on the master branch.
+The version of this egeoffrey-collection-core is 1.0-30 on the master branch.

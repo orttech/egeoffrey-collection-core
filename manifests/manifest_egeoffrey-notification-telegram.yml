@@ -1,0 +1,22 @@
+branch: master
+description: Send a notification through Telegram
+dockerhub: egeoffrey/egeoffrey-notification-telegram
+github: egeoffrey/egeoffrey-notification-telegram
+icon: hashtag
+manifest_schema: 2
+modules:
+- notification/telegram_messenger:
+    description: Send a notification via Telegram to a user or a group
+    module_configuration:
+    - description: The token of the Telegram bot you have created (https://core.telegram.org/bots#3-how-do-i-create-a-bot)
+      format: string
+      name: bot_token
+      required: true
+    - description: The chat_id you want to send the message to (https://t.me/gettingidbot)
+      format: string
+      name: chat_id
+      required: true
+package: egeoffrey-notification-telegram
+revision: 1
+tags: notification telegram
+version: 1.0
