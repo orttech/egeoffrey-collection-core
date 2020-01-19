@@ -39,11 +39,11 @@ class Gui extends Module {
         this.supported_rules_config_schema = 2
         this.supported_manifest_schema = 2
         // subscribe to required settings
-        this.add_configuration_listener("house", 1, true)
-        this.add_configuration_listener("gui/settings", "+", true)
-        this.add_configuration_listener("gui/charts", "+", true)
-        this.add_configuration_listener("gui/users", "+", true)
-        this.add_configuration_listener("gui/groups", "+", true)
+        this.add_configuration_listener("house", this.supported_house_config_schema, true)
+        this.add_configuration_listener("gui/settings", this.settings_config_schema, true)
+        this.add_configuration_listener("gui/charts", this.chart_config_schema, true)
+        this.add_configuration_listener("gui/users", this.users_config_schema, true)
+        this.add_configuration_listener("gui/groups", this.groups_config_schema, true)
         // objects of the current page
         this.page = null
         this.page_listener = null
@@ -145,7 +145,7 @@ class Gui extends Module {
         else {
             this.waiting_for_page = true
             if (this.page_listener != null) this.remove_listener(this.page_listener)
-            this.page_listener = this.add_configuration_listener("gui/pages/"+page_id, "+")
+            this.page_listener = this.add_configuration_listener("gui/pages/"+page_id, this.page_config_schema)
         }
     }
 
@@ -346,30 +346,15 @@ class Gui extends Module {
             }, 1000);
         }
         else if (message.args == "gui/settings") {
-            if (message.config_schema == 1) {
-                var config = message.get_data()
-                config["check_for_updates"] = true
-                this.upgrade_config(message.args, message.config_schema, 2, config)
-                return false
-            }
-            if (message.config_schema != this.settings_config_schema) {
-                return false
-            }
             if (! this.is_valid_configuration(["default_page", "check_for_updates"], message.get_data())) return false
             this.settings = message.get_data()
         }
         else if (message.args == "gui/users") {
-            if (message.config_schema != this.users_config_schema) {
-                return false
-            }
             this.users = message.get_data()
             // ensure the user is still authenticated
             this.is_authenticated()
         }
         else if (message.args == "gui/groups") {
-            if (message.config_schema != this.groups_config_schema) {
-                return false
-            }
             this.groups = message.get_data()
         }
         this.log_debug("Received configuration "+message.args)

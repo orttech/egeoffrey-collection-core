@@ -13,6 +13,7 @@ config
 config/
 gui/html/sdk
 gui/html/sdk/
+gui/html/gui/env_custom.js
 collection/.tmp
 collection/.build
 collection/.tmp/

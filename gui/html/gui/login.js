@@ -245,7 +245,7 @@ class Login {
                             // create a new instance of the gui and run it
                             window.gui = new Gui("gui", EGEOFFREY_USERNAME + "_" + this_class.generate_session_id())
                             // retrieve and set previously opened page if any
-                            this.restore_page()
+                            this_class.restore_page()
                             window.gui.logged_in = true
                             window.gui.run()
                         }

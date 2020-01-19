@@ -34,7 +34,7 @@ class Menu extends Widget {
         ')
         if (! gui.is_authorized(["house_admins"])) $("#menu_edit").addClass("d-none")
         // get the menu contents
-        this.add_configuration_listener("gui/menu/#", "+")
+        this.add_configuration_listener("gui/menu/#", gui.menu_config_schema)
     }
     
     // receive data and load it into the widget

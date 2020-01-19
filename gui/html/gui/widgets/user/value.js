@@ -146,6 +146,17 @@ class Value extends Widget {
                     // add value and suffix
 					if (data.length == 1) {
 						var value = data[0]
+                        // normalize the value if needed
+                        if ("normalize" in session["widget"]) {
+                            var split = session["widget"]["normalize"].split("-")
+                            min = split[0]
+                            max = split[1]
+                            var range = max - min
+                            var corrected_start_value = data[0] - min
+                            var percentage = (corrected_start_value * 100) / range 
+                            value = Math.round(percentage)
+                        } 
+                        // set the value to the widget
 						var text_color = "black"
 						for (var color of ["success", "warning", "danger"]) {
 							if ("color_"+color in session["widget"]) {
@@ -166,7 +177,11 @@ class Value extends Widget {
 							}
 						}
 						$(tag).html('<span class="text-'+text_color+'">'+value+'</span>');
-						if ("unit" in sensor) $(tag+"_suffix").html('<span class="text-'+text_color+'">'+sensor["unit"]+'</span>');
+                        // set the unit
+                        var unit = null
+						if ("unit" in sensor) unit = sensor["unit"]
+                        if ("normalize" in session["widget"]) unit = "%"
+                        if (unit != null) $(tag+"_suffix").html('<span class="text-'+text_color+'">'+unit+'</span>');
 					}
 					else $(tag).html(data.length == 1 ? data[0] : "N/A");
                 }
@@ -315,7 +330,6 @@ class Value extends Widget {
                 else if (session["widget"]["widget"] == "slider") {
                     var id = tag.replace("#","")
                     $(tag.replace("_value","_timestamp")).addClass("d-none")
-                    if (data.length != 1) return
                     // add the slider
                     $(tag).html('<input id="'+id+'_slider" type="text" name="" value="" />')
                     // configure it
@@ -336,21 +350,27 @@ class Value extends Widget {
                             gui.send(message)
                         },
                     }
-                    // normalize to percentage if needed
-                    if (session["widget"]["show_percentage"]) {
-                        options["min"] = 0
-                        options["max"] = 100
-                        options["postfix"] = "%"
-                        var range = session["widget"]["max_value"] - session["widget"]["min_value"]
-                        var corrected_start_value = data[0] - session["widget"]["min_value"]
-                        var percentage = (corrected_start_value * 100) / range 
-                        options["from"] = percentage
-                    } else {
-                        if ("min_value" in session["widget"]) options["min"] = session["widget"]["min_value"]
-                        if ("max_value" in session["widget"]) options["max"] = session["widget"]["max_value"]
-                        if ("step" in session["widget"]) options["step"] = session["widget"]["step"]
-                        if ("unit" in sensor) options["postfix"] = sensor["unit"]
-                        options["from"] = data[0]
+                    // set the value
+                    if (data.length == 1) {
+                        // normalize to percentage if needed
+                        if (session["widget"]["show_percentage"]) {
+                            options["min"] = 0
+                            options["max"] = 100
+                            options["postfix"] = "%"
+                            var range = session["widget"]["max_value"] - session["widget"]["min_value"]
+                            var corrected_start_value = data[0] - session["widget"]["min_value"]
+                            var percentage = (corrected_start_value * 100) / range 
+                            options["from"] = percentage
+                            
+                        } 
+                        // just set the raw value
+                        else {
+                            if ("min_value" in session["widget"]) options["min"] = session["widget"]["min_value"]
+                            if ("max_value" in session["widget"]) options["max"] = session["widget"]["max_value"]
+                            if ("step" in session["widget"]) options["step"] = session["widget"]["step"]
+                            if ("unit" in sensor) options["postfix"] = sensor["unit"]
+                            options["from"] = data[0]
+                        }
                     }
                     $("#"+id+"_slider").ionRangeSlider(options);
                 }

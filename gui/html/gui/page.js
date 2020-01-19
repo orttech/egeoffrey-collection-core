@@ -714,10 +714,6 @@ class Page {
                             <input type="text" id="'+id+'_value_variant" class="form-control" placeholder="1 (default) for small box, 2 for larger box">\
                         </div>\
                         <div class="form-group">\
-                            <label>Show All Link</label>\
-                            <input type="text" id="'+id+'_value_link" class="form-control" placeholder="link for the \'Show All\' link. Applicable for style 2 widgets only">\
-                        </div>\
-                        <div class="form-group">\
                             <label>Value in green if between this range</label>\
                             <input type="text" id="'+id+'_value_color_success" class="form-control" placeholder="The range (e.g. 0-60) or the value for applying the color">\
                         </div>\
@@ -728,6 +724,14 @@ class Page {
                         <div class="form-group">\
                             <label>Value in red if between this range</label>\
                             <input type="text" id="'+id+'_value_color_danger" class="form-control" placeholder="The range (e.g. 81-100) or the value for applying the color">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Normalize the value to a percentage between the following range</label>\
+                            <input type="text" id="'+id+'_value_normalize" class="form-control" placeholder="e.g. 1.8-33">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Show All Link</label>\
+                            <input type="text" id="'+id+'_value_link" class="form-control" placeholder="link for the \'Show All\' link. Applicable for style 2 widgets only">\
                         </div>\
                     </div>\
                     \
@@ -1026,7 +1030,7 @@ class Page {
         var simple_types = {}
         simple_types["general"] = ["title", "size", "widget", "offset"]
         simple_types["summary"] = ["icon", "color", "icon_sensor"]
-        simple_types["value"] = ["sensor", "icon", "color", "timestamp_sensor", "icon_sensor", "variant", "link", "color_success", "color_warning", "color_danger"]
+        simple_types["value"] = ["sensor", "icon", "color", "timestamp_sensor", "icon_sensor", "variant", "link", "color_success", "color_warning", "color_danger","normalize"]
         simple_types["timeline"] = ["group_by", "timeframe", "style", "series"]
         simple_types["range"] = ["sensor", "group_by", "timeframe"]
         simple_types["status"] = ["sensor", "timestamp_sensor", "variant"]

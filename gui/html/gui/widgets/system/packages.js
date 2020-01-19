@@ -72,7 +72,7 @@ class Packages extends Widget {
             if (manifest["manifest_schema"] != gui.supported_manifest_schema) return
             // add a new row for this package
             var icon = "icon" in manifest ? manifest["icon"] : "cube"
-            var manifest_tag = manifest["package"].replace("/", "_").replace("-", "_")
+            var manifest_tag = manifest["package"].replaceAll("/", "_").replaceAll("-", "_")
             var package_name = '\
                 <div>\
                     <i class="fas fa-'+icon+'"></i> '+manifest["package"]+'\
@@ -145,14 +145,14 @@ class Packages extends Widget {
             var url = "https://raw.githubusercontent.com/"+manifest["github"]+"/"+manifest["branch"]+"/manifest.yml?timestamp="+new Date().getTime()
             $.get(url, function(data) {
                 var remote_manifest = jsyaml.load(data)
+                var status
                 if (remote_manifest["manifest_schema"] != gui.supported_manifest_schema) {
-                    row.data()[5] = '<i class="fas fa-question"></i>'
+                    $("#"+update_id).html('<i class="fas fa-question"></i>')
                     return
                 }
                 if (remote_manifest["version"] > manifest["version"] || (remote_manifest["version"] == manifest["version"] && remote_manifest["revision"] > manifest["revision"])) $("#"+update_id).html('<a href="https://github.com/'+manifest["github"]+'/tree/'+manifest["branch"]+'" target="_blank" ><i class="fas fa-external-link-alt"></i></a>')
                 else {
-                    row.data()[5] = '<i class="fas fa-check text-success"></i>'
-                    row.invalidate()
+                    $("#"+update_id).html('<i class="fas fa-check text-success"></i>')
                 }
             });
             this.manifests[manifest["package"]] = manifest
