@@ -75,6 +75,7 @@ class Rule_wizard extends Widget {
                                 <option value="warning">Warning</option>\
                                 <option value="info">Info</option>\
                                 <option value="debug">Debug</option>\
+                                <option value="none">None</option>\
                             </select>\
                         </div>\
                         <div class="form-group">\
@@ -404,6 +405,11 @@ class Rule_wizard extends Widget {
                     rule["conditions"].push(block)
                 }
                 if (! ("conditions" in rule)) rule["conditions"] = [[]]
+                // actions
+                $("#"+this_class.id+"_actions :input[type=text]").each(function(e){
+                    if (! ("actions" in rule)) rule["actions"] = []
+                    rule["actions"].push(this.value)
+                });
                 // save new/updated configuration
                 var message = new Message(gui)
                 message.recipient = "controller/config"

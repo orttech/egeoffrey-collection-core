@@ -58,6 +58,8 @@ class Gui extends Module {
         this.scheduler_events = []
         // flag set on when the user is logged in
         this.logged_in = false
+        // keep track of all timers
+        this.timers = []
     }
     
 	// notify the user about something
@@ -89,8 +91,18 @@ class Gui extends Module {
         });
 	}
     
+    // clear all running timers
+    clear_timers() {
+        for (var timer of this.timers) {
+            clearInterval(timer)
+        }
+        this.timers = []
+    }
+    
     // unload the current page
     unload_page() {
+        // clear all timers
+        this.clear_timers()
         // clear all previously cached settings
         this.requests = {}
         // unsubscribe from all previously subscribed objects
@@ -177,6 +189,8 @@ class Gui extends Module {
     // log out the user
     logout() {
         this.logged_in = false
+        // clear all timers
+        this.clear_timers()
         this.join()
     }
     

@@ -1072,11 +1072,6 @@ class Page {
                     this.widget_wizard_add_array_item(id+'_permissions_groups', value)
                 }
             }
-            $("#"+id+'_permissions_groups_add').unbind().click(function(this_class, id) {
-                return function () {
-                    this_class.widget_wizard_add_array_item(id)
-                };
-            }(this, id+'_permissions_groups'));
             // widget-specific simple elements
             for (var type in simple_types) {
                 if (widget["widget"] == type) {
@@ -1095,12 +1090,6 @@ class Page {
                             var value = widget[key][i]
                             this.widget_wizard_add_array_item(id+'_'+type+'_'+key, value)
                         }
-                        // configure add button
-                        $("#"+id+'_'+type+'_'+key+"_add").unbind().click(function(this_class, id) {
-                            return function () {
-                                this_class.widget_wizard_add_array_item(id)
-                            };
-                        }(this, id+'_'+type+'_'+key));
                     }
                 }
             }
@@ -1112,6 +1101,23 @@ class Page {
                         $("#"+id+"_"+type+"_"+key).prop("checked", widget[key])
                     }
                 }
+            }
+        }
+        // configure permission tab
+        $("#"+id+'_permissions_groups_add').unbind().click(function(this_class, id) {
+            return function () {
+                this_class.widget_wizard_add_array_item(id)
+            };
+        }(this, id+'_permissions_groups'));
+        // configure add buttons
+        for (var type in array_types) {
+            for (var key of array_types[type]) {
+                // configure add button
+                $("#"+id+'_'+type+'_'+key+"_add").unbind().click(function(this_class, id) {
+                    return function () {
+                        this_class.widget_wizard_add_array_item(id)
+                    };
+                }(this, id+'_'+type+'_'+key));
             }
         }
         // configure _widget type selector

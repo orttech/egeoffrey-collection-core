@@ -90,6 +90,15 @@ class Summary extends Widget {
         else $(tag).html(gui.date.timestamp_difference(gui.date.now(), this.timestamp))
     }
     
+    // schedule to update the timestamp
+    schedule_update_timestamp() {
+        var this_class = this
+        this.timestamp_timer = setTimeout(function() {
+            this_class.update_timestamp()
+        }, 10000);
+        gui.timers.push(this.timestamp_timer)
+    }
+    
     // draw the widget's content
     draw() {
         // IDs Template: _box, _title, _refresh, _popup, _body, _loading
@@ -159,10 +168,7 @@ class Summary extends Widget {
                 this.update_timestamp()
                 // periodically refresh the elapsed time
                 if (this.timestamp_timer != null) clearInterval(this.timestamp_timer)
-                var this_class = this
-                this.timestamp_timer = setInterval(function() {
-                        this_class.update_timestamp()
-                    }, 10000);
+                this.schedule_update_timestamp()
             }
             // add chart data
             else if (session["component"] == "chart") {

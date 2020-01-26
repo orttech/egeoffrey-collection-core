@@ -35,14 +35,14 @@ class Rules extends Widget {
         // 1: rule
         // 2: severity
         // 3: type (hidden)
-        // 4: for
+        // 4: definitions
         // 5: conditions
         // 6: actions
         // 7: disabled (hidden)
         var table = '\
             <table id="'+this.id+'_table" class="table table-bordered table-striped">\
                 <thead>\
-                    <tr><th>_rule_id_</th><th class="all">Rule</th><th>Severity</th><th>Type</th><th>For</th><th>Conditions</th><th>Actions</th><th>Disabled</th></tr>\
+                    <tr><th>_rule_id_</th><th class="all">Rule</th><th>Severity</th><th>Type</th><th>Definitions</th><th>Conditions</th><th>Additional Actions</th><th>Disabled</th></tr>\
                 </thead>\
                 <tbody></tbody>\
             </table>'
@@ -163,9 +163,20 @@ class Rules extends Widget {
         if ("actions" in rule) {
             for (var action of rule["actions"]) actions = actions+action+"<br>"
         }
-        var macros = ""
+        var definitions = ""
         if ("macros" in rule) {
-            for (var i of rule["macros"]) macros = macros+i+"<br>"
+            definitions = definitions+"<u>%i%</u>:<br>"
+            for (var i of rule["macros"]) definitions = definitions+i+"<br>"
+        }
+        if ("variables" in rule) {
+            if ("macros" in rule) definitions = definitions+"<br>"
+            definitions = definitions+"<u>Variables</u>:<br>"
+            for (var variable in rule["variables"]) definitions = definitions+variable+": <i>"+rule["variables"][variable]+"</i><br>"
+        }
+        if ("constants" in rule) {
+            if ("macros" in rule || "variables" in rule) definitions = definitions+"<br>"
+            definitions = definitions+"<u>Constants</u>:<br>"
+            for (var constant in rule["constants"]) definitions = definitions+constant+": <i>"+rule["constants"][constant]+"</i><br>"
         }
         var run_html = '<button type="button" id="'+this.id+'_run_'+rule_tag+'" class="btn btn-default"><i class="fas fa-play"></i></button>'
         var edit_html = '<button type="button" id="'+this.id+'_edit_'+rule_tag+'" class="btn btn-default"><i class="fas fa-edit"></i></button>'
@@ -176,7 +187,7 @@ class Rules extends Widget {
             description, 
             severity,
             rule["type"], 
-            this.disabled_item(macros, disabled), 
+            this.disabled_item(definitions, disabled), 
             this.disabled_item(conditions, disabled), 
             format_multiline(this.disabled_item(actions, disabled), 30), 
             disabled,
@@ -201,7 +212,7 @@ class Rules extends Widget {
             };
         }(rule_id));
         // delete the rule
-        $("#"+this.id+"_delete_"+rule_tag).unbind().click(function(rule_id) {
+        $("#"+this.id+"_delete_"+rule_tag).unbind().click(function(rule_id, version) {
             return function () {
                 gui.confirm("Do you really want to delete rule "+rule_id+"?", function(result){ 
                     if (! result) return
@@ -210,11 +221,12 @@ class Rules extends Widget {
                     message.recipient = "controller/config"
                     message.command = "DELETE"
                     message.args = "rules/"+rule_id
+                    message.config_schema = version
                     gui.send(message)
                     gui.notify("info", "Requesting to delete rule "+rule_id)
                 });
             };
-        }(rule_id));
+        }(rule_id, message.config_schema));
         // disable run if rule is disabled
         if (disabled) $("#"+this.id+"_run_"+rule_tag).remove();
     }

@@ -243,6 +243,7 @@ class Sensor_wizard extends Widget {
                 // show/hide the schedule panel
                 if (selected_mode == "pull") $('#'+this_class.id+'_tab_service_schedule').parent('li').removeClass("d-none")
                 else $('#'+this_class.id+'_tab_service_schedule').parent('li').addClass("d-none")
+                $('#'+this_class.id+'_service_schedule_trigger').trigger("change")
                 // clear service configuration
                 $('#'+this_class.id+'_tab_service_configuration_content').html("")
                 // get the manifest associated to the selected service
@@ -430,7 +431,7 @@ class Sensor_wizard extends Widget {
                 for (var value in data[item]) {
                     $('#'+this.id+'_'+item).append($('<option>', {
                         value: escape_html(value),
-                        text: escape_html(data[item][value]["description"])
+                        text: escape_html(value+" - "+data[item][value]["description"])
                     }));
                 }
             }

@@ -201,4 +201,4 @@ collection core
 
 ## Version
 
-The version of this egeoffrey-collection-core is 1.0-31 on the master branch.
+The version of this egeoffrey-collection-core is 1.0-32 on the master branch.

@@ -195,6 +195,7 @@ class Configuration extends Widget {
                         <button type="button"  onclick="window.history.go(-1); return false;" class="btn btn-default">Back</button> \
                         <button type="button" id="'+tab_id+'_save" class="btn btn-primary">Save</button>\
                         <button type="button" id="'+tab_id+'_delete" class="float-right btn btn-default text-red">Delete</button>\
+                        <button type="button" id="'+tab_id+'_rename" class="float-right btn btn-default">Rename</button>\
                     </div>\
                 </div>'
             $("#"+this.id+"_tab_content").append(tab_content_html)
@@ -239,6 +240,35 @@ class Configuration extends Widget {
                     if (location.hash.includes("=")) window.history.back()
                 };
             }(message.args, this.tabs_schema, tab_id, is_new_item, codemirror))
+            // configure the rename button
+            $("#"+tab_id+"_rename").unbind().click(function(args, tabs_schema) {
+                return function () {
+                    bootbox.prompt("Give the file "+args+" a new name", function(result){ 
+                        if (! result) return
+                        try {
+                            var yaml = jsyaml.load($("#"+tab_id+"_text").val())
+                        } catch(e) {
+                            gui.notify("error","Invalid configuration file: "+e.message)
+                            return
+                        }
+                        var config_schema = tabs_schema[args]
+                        var message = new Message(gui)
+                        message.recipient = "controller/config"
+                        message.command = "DELETE"
+                        message.args = args
+                        message.config_schema = config_schema
+                        gui.send(message)
+                        var message = new Message(gui)
+                        message.recipient = "controller/config"
+                        message.command = "SAVE"
+                        message.args = result
+                        message.config_schema = config_schema
+                        message.set_data(yaml)
+                        gui.send(message)
+                        gui.notify("info","Renaming configuration file "+args+" into "+result)
+                    });
+                };
+            }(message.args, this.tabs_schema))
             // configure the delete button
             $("#"+tab_id+"_delete").unbind().click(function(args, tabs_schema) {
                 return function () {

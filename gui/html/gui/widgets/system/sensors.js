@@ -228,13 +228,14 @@ class Sensors extends Widget {
                         </button>\
                         <div class="dropdown-menu" role="menu">\
                             <a class="dropdown-item" id="'+this.id+'_poll_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-play"></i> Poll Service</a>\
-                            <a class="dropdown-item" id="'+this.id+'_request_data_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-sync"></i> Request Value</a>\
-                            <a class="dropdown-item" id="'+this.id+'_set_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-sign-out-alt"></i> Set Value</a>\
+                            <a class="dropdown-item" id="'+this.id+'_request_data_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-sync"></i> Refresh Value</a>\
                             <a class="dropdown-item" id="'+this.id+'_graph_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-chart-bar"></i> Show Graph</a>\
+                            <div class="dropdown-divider"></div>\
+                            <a class="dropdown-item" id="'+this.id+'_set_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-sign-out-alt"></i> Set Value</a>\
                             <a class="dropdown-item" id="'+this.id+'_edit_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-edit"></i> Edit Sensor</a>\
-                            <a class="dropdown-item" id="'+this.id+'_empty_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-eraser"></i> Empty Database</a>\
                             <a class="dropdown-item" id="'+this.id+'_retain_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-backspace"></i> Apply Retention Policies</a>\
                             <div class="dropdown-divider"></div>\
+                            <a class="dropdown-item" id="'+this.id+'_empty_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-eraser"></i> Empty Database</a>\
                             <a class="dropdown-item" id="'+this.id+'_delete_'+sensor_tag+'" style="cursor: pointer"><i class="fas fa-trash"></i> Delete Sensor</a>\
                         </div>\
                     </div>\
